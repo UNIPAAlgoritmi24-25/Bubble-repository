@@ -57,6 +57,11 @@ def merge_sort(values):
 
     return values
 
+def quick_sort(values, start, end):
+    if start < end:
+        q= Partition(values, start, end)
+        quick_sort(values, start, q-1)
+        quick_sort(values, q+1, end)
 
 if __name__ == "__main__":
     test_size = 16
