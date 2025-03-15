@@ -99,7 +99,25 @@ def partition(values, start, end):
 # Insertion sort
 # ---------------------------------------------------------------------#
 
-...
+def insertion_sort(values):
+    """
+    The Insertion sort algorithm builds a sorted array by iteratively inserting 
+    each element into its correct position within the already sorted portion.
+    It works similarly to how people sort playing cards in their hands.
+    It is an in-place algorithm with simple implementation.
+    Time complexity: O(n²) in worst case, but efficient for small or nearly sorted arrays.
+   """
+    n = len(values)
+    for i in range(1, n):
+        key = values[i]
+        j = i - 1
+
+        while j >= 0 and values[j] > key:
+            values[j + 1] = values[j] 
+            j = j - 1
+        
+        values[j + 1] = key
+    return values
 
 if __name__ == "__main__":
     test_size = 160
@@ -107,4 +125,5 @@ if __name__ == "__main__":
     print("Before sorting: ", *values)
     # values = merge_sort(values)
     # quick_sort(values, 0, len(values)-1)
+    # values = insertion_sort(values)
     print("After sorting: ", values)
