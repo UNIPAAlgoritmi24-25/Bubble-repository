@@ -129,23 +129,26 @@ if __name__ == "__main__":
 
     input_lists=[[randint(0,100) for x in range(1000)], [randint(0,100) for x in range(4000)], [randint(0,100) for x in range(8000)], [randint(0,100) for x in range(12000)], [randint(0,100) for x in range(16000)], [randint(0,100) for x in range(20000)]]
     functions=[lambda x: quick_sort(x,0, len(x)-1), lambda x: merge_sort(x), lambda x: insertion_sort(x)]
-    functions_name={'quick_sort': [], 'merge_sort': [], 'insertion_sort': []}
+    functions_dictionary={'quick_sort': [], 'merge_sort': [], 'insertion_sort': []}
     
     sys.setrecursionlimit(999999)
     
 
     for values in input_lists:
-        for algorithm,name in zip(functions, functions_name.keys()):
+
+        for algorithm,name in zip(functions, functions_dictionary.keys()):
+            
             mean_time=0
+
             for run in range(0,10):
                 start_time=time.time()
                 algorithm(values)
                 end_time=time.time()
                 mean_time=mean_time+((end_time-start_time)/10)
         
-            functions_name[name].append(mean_time)
+            functions_dictionary[name].append(mean_time)
 
-    print(functions_name)
+    print(functions_dictionary)
           
 
     
