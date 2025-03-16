@@ -4,6 +4,8 @@ This module contains the implementation of various sorting algorithms.
 
 from random import randint
 import time
+import sys
+
 # ---------------------------------------------------------------------#
 # Merge sort
 # ---------------------------------------------------------------------#
@@ -83,9 +85,9 @@ def partition(values, start, end):
     index from where to start and where to end the next sublists division.
     """
 
-    pivot = values[end]
+    pivot = values[randint(start, end)]
     i = start - 1
-
+    
     for j in range(start, end):
         if values[j] <= pivot:
             i += 1
@@ -120,24 +122,35 @@ def insertion_sort(values):
     return values
 
 if __name__ == "__main__":
-    test_size = 160
-    values = [randint(0, 100) for _ in range(test_size)]
-    print("Before sorting: ", *values)
+
     # values = merge_sort(values)
     # quick_sort(values, 0, len(values)-1)
     # values = insertion_sort(values)
 
-    L=[]
+    input_lists=[[randint(0,100) for x in range(1000)], [randint(0,100) for x in range(4000)], [randint(0,100) for x in range(8000)], [randint(0,100) for x in range(12000)], [randint(0,100) for x in range(16000)], [randint(0,100) for x in range(20000)]]
+    functions=[lambda x: quick_sort(x,0, len(x)-1), lambda x: merge_sort(x), lambda x: insertion_sort(x)]
+    functions_name={'quick_sort': [], 'merge_sort': [], 'insertion_sort': []}
+    
+    sys.setrecursionlimit(999999)
+    
 
-    for i in range(1,6):
-        L.append([])
-        for j in range(0,10**i):
-            L[i-1].append(randint(0,10**i))
-    print(L)
+    for values in input_lists:
+        for algorithm,name in zip(functions, functions_name.keys()):
+            mean_time=0
+            for run in range(0,10):
+                start_time=time.time()
+                algorithm(values)
+                end_time=time.time()
+                mean_time=mean_time+((end_time-start_time)/10)
+        
+            functions_name[name].append(mean_time)
 
-    j=[lambda x: quicksort(x,0, len(x)), lambda x: mergesort(x)]
+    print(functions_name)
+          
+
+    
+
 
   
  #quicksort(lista, 0, len(lista)-1)
  #mergesort(lista)
-    print("After sorting: ", values)
