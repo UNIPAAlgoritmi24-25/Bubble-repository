@@ -3,7 +3,7 @@ This module contains the implementation of various sorting algorithms.
 """
 
 from random import randint
-
+import time
 # ---------------------------------------------------------------------#
 # Merge sort
 # ---------------------------------------------------------------------#
@@ -126,4 +126,18 @@ if __name__ == "__main__":
     # values = merge_sort(values)
     # quick_sort(values, 0, len(values)-1)
     # values = insertion_sort(values)
+
+    L=[]
+
+    for i in range(1,6):
+        L.append([])
+        for j in range(0,10**i):
+            L[i-1].append(randint(0,10**i))
+    print(L)
+
+    j=[lambda x: quicksort(x,0, len(x)), lambda x: mergesort(x)]
+
+  
+ #quicksort(lista, 0, len(lista)-1)
+ #mergesort(lista)
     print("After sorting: ", values)
