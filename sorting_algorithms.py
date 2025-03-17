@@ -147,7 +147,7 @@ def ShortBubbleSort (array):
     exchange = True
     pass_num = len(array)-1
     while pass_num >0 and exchange:
-        
+
         exchange = False 
         for i in range (pass_num):
             if array[i] > array[i+1]:
@@ -164,8 +164,8 @@ if __name__ == "__main__":
     # values = insertion_sort(values)
 
     input_lists=[[randint(0,100) for x in range(1000)], [randint(0,100) for x in range(4000)], [randint(0,100) for x in range(8000)], [randint(0,100) for x in range(12000)], [randint(0,100) for x in range(16000)], [randint(0,100) for x in range(20000)]]
-    functions=[lambda x: quick_sort(x,0, len(x)-1), lambda x: merge_sort(x), lambda x: insertion_sort(x)]
-    functions_dictionary={'quick_sort': [], 'merge_sort': [], 'insertion_sort': []}
+    functions=[lambda x: quick_sort(x,0, len(x)-1), lambda x: merge_sort(x), lambda x: insertion_sort(x), lambda x: BubbleSort(x), lambda x: ShortBubbleSort(x)]
+    functions_dictionary={'quick_sort': [], 'merge_sort': [], 'insertion_sort': [], "BubbleSort":[], "ShortBubbleSort": []}
     
     sys.setrecursionlimit(999999)
     
