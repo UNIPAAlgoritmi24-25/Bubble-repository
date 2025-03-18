@@ -121,6 +121,42 @@ def insertion_sort(values):
         values[j + 1] = key
     return values
 
+
+"""Bubble sort makes multiple passes through a list. 
+It compares adjacent elements and exchanges those that are out of order. 
+Each pass through the list places the next largest value in its proper place, relative to the unsorted
+portion of the list.
+
+We provide two implementations: one with a complexity of Θ(n²) (for the standard BubbleSort), 
+and another, that uses a flag and is sometimes referred to as "Short Bubble Sort", 
+with a complexity of  Ω(n) and O(n²)."""
+
+
+def BubbleSort (array):
+    n = len (array)
+    for i in range (n-1):
+        for j in range (n-1-i):
+            if array[j] > array [j+1]:
+                array[j], array[j+1] = array[j+1],array[j]
+    return array
+
+
+
+
+def ShortBubbleSort (array):
+    exchange = True
+    pass_num = len(array)-1
+    while pass_num >0 and exchange:
+
+        exchange = False 
+        for i in range (pass_num):
+            if array[i] > array[i+1]:
+                exchange = True
+                array[i],array[i+1]=array[i+1],array[i]
+        pass_num-=1
+    return array
+
+
 if __name__ == "__main__":
 
     # values = merge_sort(values)
@@ -128,8 +164,8 @@ if __name__ == "__main__":
     # values = insertion_sort(values)
 
     input_lists=[[randint(0,100) for x in range(1000)], [randint(0,100) for x in range(4000)], [randint(0,100) for x in range(8000)], [randint(0,100) for x in range(12000)], [randint(0,100) for x in range(16000)], [randint(0,100) for x in range(20000)]]
-    functions=[lambda x: quick_sort(x,0, len(x)-1), lambda x: merge_sort(x), lambda x: insertion_sort(x)]
-    functions_dictionary={'quick_sort': [], 'merge_sort': [], 'insertion_sort': []}
+    functions=[lambda x: quick_sort(x,0, len(x)-1), lambda x: merge_sort(x), lambda x: insertion_sort(x), lambda x: BubbleSort(x), lambda x: ShortBubbleSort(x)]
+    functions_dictionary={'quick_sort': [], 'merge_sort': [], 'insertion_sort': [], "BubbleSort":[], "ShortBubbleSort": []}
     
     sys.setrecursionlimit(999999)
     
@@ -151,9 +187,9 @@ if __name__ == "__main__":
     print(functions_dictionary)
           
 
+
+
     
 
 
-  
- #quicksort(lista, 0, len(lista)-1)
- #mergesort(lista)
+
