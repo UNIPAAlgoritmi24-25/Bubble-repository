@@ -157,6 +157,39 @@ def ShortBubbleSort (array):
     return array
 
 
+
+
+"""CountingSort is a non-comparative sorting algorithm that sorts elements by counting the occurrences of each value within a specified range. 
+
+It then uses the cumulative frequency to determine the correct position of each element in the sorted output array.
+
+Algorithm time complexity: O(n + k), where n is the number of elements in the input array, and k is the range of values.
+
+Algorithm space complexity: O(n + k), due to the space required for the frequency array and the ordered output array."""
+
+
+def CountingSort(array):
+    min_value = min(array)
+    max_value = max(array)
+    n = len(array)
+    range_values = (max_value-min_value) +1
+    frequency_array = [0] * range_values
+    for element in array:
+        frequency_array[element - min_value]+=1
+   
+    for i in range (1,len(frequency_array)):
+        frequency_array[i]+=frequency_array[i-1]
+   
+    ordered_array = [0] * (n)
+    for j in range (n-1,-1,-1):
+        element = array[j]
+        pos = frequency_array[element-min_value]-1
+        ordered_array[pos] = element
+        frequency_array[element - min_value]-=1
+    return (ordered_array)
+
+
+
 if __name__ == "__main__":
 
     # values = merge_sort(values)
@@ -164,8 +197,8 @@ if __name__ == "__main__":
     # values = insertion_sort(values)
 
     input_lists=[[randint(0,100) for x in range(1000)], [randint(0,100) for x in range(4000)], [randint(0,100) for x in range(8000)], [randint(0,100) for x in range(12000)], [randint(0,100) for x in range(16000)], [randint(0,100) for x in range(20000)]]
-    functions=[lambda x: quick_sort(x,0, len(x)-1), lambda x: merge_sort(x), lambda x: insertion_sort(x), lambda x: BubbleSort(x), lambda x: ShortBubbleSort(x)]
-    functions_dictionary={'quick_sort': [], 'merge_sort': [], 'insertion_sort': [], "BubbleSort":[], "ShortBubbleSort": []}
+    functions=[lambda x: quick_sort(x,0, len(x)-1), lambda x: merge_sort(x), lambda x: insertion_sort(x), lambda x: BubbleSort(x), lambda x: ShortBubbleSort(x), lambda x: CountingSort(x)]
+    functions_dictionary={'quick_sort': [], 'merge_sort': [], 'insertion_sort': [], "BubbleSort":[], "ShortBubbleSort": [], "CountingSort":[]}
     
     sys.setrecursionlimit(999999)
     
