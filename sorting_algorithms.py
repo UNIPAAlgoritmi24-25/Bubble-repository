@@ -121,6 +121,40 @@ def insertion_sort(values):
         values[j + 1] = key
     return values
 
+# ---------------------------------------------------------------------#
+# Binary Insertion sort
+# ---------------------------------------------------------------------#
+
+def bin_search(a, val, start, end):
+    """
+    The Binary Insertion Sort algorithm builds a sorted array by iteratively inserting
+    each element into its correct position within the already sorted portion,
+    using binary search to determine the insertion point.
+    It improves upon standard Insertion Sort by reducing the number of comparisons needed.
+    While it requires O(n log n) comparisons, the shifting operations still require O(n²) time.
+    Time complexity: O(n²) in worst case, but with fewer comparisons than standard Insertion Sort.
+    Particularly efficient when comparison operations are more expensive than shifting elements.
+    """
+    if start > end:
+        return start
+    mid = (start+end)//2
+    if a[mid] <= val:
+        return bin_search(a, val, mid+1, end)
+    else:
+        return bin_search(a, val, start, mid-1)
+
+def BinaryInsertionSort(a):
+    for i in range(1, len(a)):
+        val = a[i]
+        j = bin_search(a, val, 0, i-1)
+        for t in range(i-1,j-1,-1):
+            a[t+ 1] = a[t]    
+        a[j] = val
+    return a
+
+# ---------------------------------------------------------------------#
+# Bubble Sort
+# ---------------------------------------------------------------------#
 
 """Bubble sort makes multiple passes through a list. 
 It compares adjacent elements and exchanges those that are out of order. 
@@ -157,7 +191,9 @@ def ShortBubbleSort (array):
     return array
 
 
-
+# ---------------------------------------------------------------------#
+# Counting sort
+# ---------------------------------------------------------------------#
 
 """CountingSort is a non-comparative sorting algorithm that sorts elements by counting the occurrences of each value within a specified range. 
 
@@ -194,7 +230,7 @@ if __name__ == "__main__":
 
     # values = merge_sort(values)
     # quick_sort(values, 0, len(values)-1)
-    # values = insertion_sort(values)
+    # values = BinaryInsertionSort(values)
 
     input_lists=[[randint(0,100) for x in range(1000)], [randint(0,100) for x in range(4000)], [randint(0,100) for x in range(8000)], [randint(0,100) for x in range(12000)], [randint(0,100) for x in range(16000)], [randint(0,100) for x in range(20000)]]
     functions=[lambda x: quick_sort(x,0, len(x)-1), lambda x: merge_sort(x), lambda x: insertion_sort(x), lambda x: BubbleSort(x), lambda x: ShortBubbleSort(x), lambda x: CountingSort(x)]
