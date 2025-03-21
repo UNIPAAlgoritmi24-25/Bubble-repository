@@ -6,7 +6,7 @@ import sorting_algorithms as sorting
 
 def main():
     t_1 = "Comparing sorting algorithms performances"
-    st.title("Comparing sorting algorithms performances")
+    st.title(t_1)
 
     input_sizes = (10, 100, 1000)
     n_of_runs = 10

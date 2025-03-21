@@ -12,54 +12,54 @@ from utils import random_list
 # ---------------------------------------------------------------------#
 
 
-def merge(left, right, vector):
+def merge(left, right, values):
     """
     The merge procedure in the merge sort algorithm
     merges two sorted arrays into one."""
 
     i_left = i_right = j = 0
 
-    # comparing left and right sublists and merging them in vector
+    # comparing left and right sublists and merging them in values
     while i_left < len(left) and i_right < len(right):
         if left[i_left] <= right[i_right]:
-            vector[j] = left[i_left]
+            values[j] = left[i_left]
             i_left += 1
         else:
-            vector[j] = right[i_right]
+            values[j] = right[i_right]
             i_right += 1
         j += 1
 
-    # Copy any remaining vector
+    # Copy any remaining values
     while i_left < len(left):
-        vector[j] = left[i_left]
+        values[j] = left[i_left]
         i_left += 1
         j += 1
 
     while i_right < len(right):
-        vector[j] = right[i_right]
+        values[j] = right[i_right]
         i_right += 1
         j += 1
 
-    return vector
+    return values
 
 
-def merge_sort(vector):
+def merge_sort(values):
     """
     The Merge sort algorithm is a divide and impera algorithm that divides the
     array into two halves, sorts them and then merges them back together.
     It is a recursive, non in-place algorithm.
     Time complexity: O(n log n)
     """
-    if len(vector) <= 1:
-        return vector
+    if len(values) <= 1:
+        return values
 
-    mid = len(vector) // 2
-    left = merge_sort(vector[:mid])
-    right = merge_sort(vector[mid:])
+    mid = len(values) // 2
+    left = merge_sort(values[:mid])
+    right = merge_sort(values[mid:])
 
-    vector = merge(left, right, vector)
+    values = merge(left, right, values)
 
-    return vector
+    return values
 
 
 # ---------------------------------------------------------------------#
@@ -67,7 +67,7 @@ def merge_sort(vector):
 # ---------------------------------------------------------------------#
 
 
-def quick_sort(vector, start, end):
+def quick_sort(values, start, end):
     """
     The Quick sort algorithm is a divide and impera algorithm that use a
     pivot and move elements bigger than pivot to the right and  smaller than pivot to the left
@@ -75,26 +75,26 @@ def quick_sort(vector, start, end):
     Time complexity: O(n log n)
     """
     if start < end:
-        q = partition(vector, start, end)
-        quick_sort(vector, start, q - 1)
-        quick_sort(vector, q + 1, end)
+        q = partition(values, start, end)
+        quick_sort(values, start, q - 1)
+        quick_sort(values, q + 1, end)
 
 
-def partition(vector, start, end):
+def partition(values, start, end):
     """
-    partion helper function that swap vector and return the i'th
+    partion helper function that swap values and return the i'th
     index from where to start and where to end the next sublists division.
     """
 
-    pivot = vector[randint(start, end)]
+    pivot = values[randint(start, end)]
     i = start - 1
 
     for j in range(start, end):
-        if vector[j] <= pivot:
+        if values[j] <= pivot:
             i += 1
-            vector[i], vector[j] = vector[j], vector[i]
+            values[i], values[j] = values[j], values[i]
     # print(i+1)
-    vector[i + 1], vector[end] = vector[end], vector[i + 1]
+    values[i + 1], values[end] = values[end], values[i + 1]
     return i + 1
 
 
@@ -103,7 +103,7 @@ def partition(vector, start, end):
 # ---------------------------------------------------------------------#
 
 
-def insertion_sort(vector):
+def insertion_sort(values):
     """
     The Insertion sort algorithm builds a sorted array by iteratively inserting
     each element into its correct position within the already sorted portion.
@@ -111,17 +111,17 @@ def insertion_sort(vector):
     It is an in-place algorithm with simple implementation.
     Time complexity: O(n²) in worst case, but efficient for small or nearly sorted arrays.
     """
-    n = len(vector)
+    n = len(values)
     for i in range(1, n):
-        key = vector[i]
+        key = values[i]
         j = i - 1
 
-        while j >= 0 and vector[j] > key:
-            vector[j + 1] = vector[j]
+        while j >= 0 and values[j] > key:
+            values[j + 1] = values[j]
             j = j - 1
 
-        vector[j + 1] = key
-    return vector
+        values[j + 1] = key
+    return values
 
 
 # ---------------------------------------------------------------------#
@@ -169,14 +169,14 @@ def ShortBubbleSort(array):
 def CountingSort(array):
     """CountingSort is a non-comparative sorting algorithm that sorts elements by counting the occurrences of each value within a specified range.
     It then uses the cumulative frequency to determine the correct position of each element in the sorted output array.
-    Algorithm time complexity: O(n + k), where n is the number of elements in the input array, and k is the range of vector.
+    Algorithm time complexity: O(n + k), where n is the number of elements in the input array, and k is the range of values.
     Algorithm space complexity: O(n + k), due to the space required for the frequency array and the ordered output array.
     """
     min_value = min(array)
     max_value = max(array)
     n = len(array)
-    range_vector = (max_value - min_value) + 1
-    frequency_array = [0] * range_vector
+    range_values = (max_value - min_value) + 1
+    frequency_array = [0] * range_values
     for element in array:
         frequency_array[element - min_value] += 1
 
@@ -218,8 +218,8 @@ def performance_test(
     # set this high to avoid max recursion depth errors with recursive
     # algos like quicksort and mergesort
     sys.setrecursionlimit(999999)
-    # generate random vectors to be sorted
-    random_vectors = [random_list(size) for size in input_sizes]
+    # generate random valuess to be sorted
+    random_valuess = [random_list(size) for size in input_sizes]
 
     functions = [
         lambda x: quick_sort(x, 0, len(x) - 1),
@@ -240,14 +240,14 @@ def performance_test(
         "CountingSort": [],
     }
 
-    for vector in random_vectors:
+    for values in random_valuess:
         for algorithm, name in zip(functions, performances.keys()):
             time_total = 0
 
             for run in range(n_of_runs):
                 # call the algo to sort the list and record the elapsed time
                 start_time = time.time()
-                algorithm(vector)
+                algorithm(values)
                 end_time = time.time()
 
                 time_total += end_time - start_time
