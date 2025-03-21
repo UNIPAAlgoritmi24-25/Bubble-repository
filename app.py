@@ -5,6 +5,7 @@ import sorting_algorithms as sorting
 
 
 def main():
+    t_1 = "Comparing sorting algorithms performances"
     st.title("Comparing sorting algorithms performances")
 
     input_sizes = (10, 100, 1000)
@@ -29,9 +30,9 @@ def main():
     for algo_name, times in results.items():
         ax.plot(input_sizes, times, marker="o", label=algo_name)
 
-    ax.set_xlabel("Dimensione dell'input")
-    ax.set_ylabel("Tempo medio (s)")
-    ax.set_title("Confronto degli algoritmi di ordinamento")
+    ax.set_xlabel("Input size")
+    ax.set_ylabel("Avg time (s)")
+    ax.set_title(t_1)
     ax.legend()
     ax.grid(True)
 
