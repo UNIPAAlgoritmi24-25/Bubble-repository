@@ -123,6 +123,40 @@ def insertion_sort(values):
         values[j + 1] = key
     return values
 
+# ---------------------------------------------------------------------#
+# Binary Insertion sort
+# ---------------------------------------------------------------------#
+
+def bin_search(a, val, start, end):
+    """
+    The Binary Insertion Sort algorithm builds a sorted array by iteratively inserting
+    each element into its correct position within the already sorted portion,
+    using binary search to determine the insertion point.
+    It improves upon standard Insertion Sort by reducing the number of comparisons needed.
+    While it requires O(n log n) comparisons, the shifting operations still require O(n²) time.
+    Time complexity: O(n²) in worst case, but with fewer comparisons than standard Insertion Sort.
+    Particularly efficient when comparison operations are more expensive than shifting elements.
+    """
+    if start > end:
+        return start
+    mid = (start+end)//2
+    if a[mid] <= val:
+        return bin_search(a, val, mid+1, end)
+    else:
+        return bin_search(a, val, start, mid-1)
+
+def BinaryInsertionSort(a):
+    for i in range(1, len(a)):
+        val = a[i]
+        j = bin_search(a, val, 0, i-1)
+        for t in range(i-1,j-1,-1):
+            a[t+ 1] = a[t]    
+        a[j] = val
+    return a
+
+# ---------------------------------------------------------------------#
+# Bubble Sort
+# ---------------------------------------------------------------------#
 
 # ---------------------------------------------------------------------#
 # Bubble sort
@@ -166,10 +200,15 @@ def ShortBubbleSort(array):
 # ---------------------------------------------------------------------#
 
 
+
 def CountingSort(array):
-    """CountingSort is a non-comparative sorting algorithm that sorts elements by counting the occurrences of each value within a specified range.
+    """
+    CountingSort is a non-comparative sorting algorithm that sorts elements by counting the occurrences of each value within a specified range.
+    
     It then uses the cumulative frequency to determine the correct position of each element in the sorted output array.
+    
     Algorithm time complexity: O(n + k), where n is the number of elements in the input array, and k is the range of values.
+    
     Algorithm space complexity: O(n + k), due to the space required for the frequency array and the ordered output array.
     """
     min_value = min(array)
