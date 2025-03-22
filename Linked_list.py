@@ -30,13 +30,37 @@ class LinkedList:
 
         print(end='\n')
     
+    def minimum(self):
+        current=self.head
+        min=self.head
+        while current:
+            if current.value < min.value:
+                min=current
+            current=current.next 
+
+        return min.value 
+    
+    def maximum(self):
+        current=self.head
+        max=self.head
+        while current:
+            if current.value > max.value:
+                max=current
+            current=current.next 
+
+        return max.value 
+
+
+    
 g=LinkedList()
 g.insert(4)
 g.insert(5)
 g.insert(6)
+g.insert(2)
+
 g.print()
-            
-        
+print(g.minimum())
+print(g.maximum())
     
 # lista = [1,5,8,9,3]
 # ll = LinkedList(lista)
