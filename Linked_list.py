@@ -29,3 +29,30 @@ class LinkedList:
     
     def __str__ (self):
         pass
+    
+    def minimum(self):
+        if not self.values_list:
+            return None
+        
+        min_value = self.values_list[0]
+        for value in self.values_list:
+            if value < min_value:
+                min_value = value
+        
+        return min_value
+
+    def maximum(self):
+        if not self.values_list:
+            return None
+            
+        max_value = self.values_list[0]
+        for value in self.values_list:
+            if value > max_value:
+                max_value = value
+            
+        return max_value
+    
+# lista = [1,5,8,9,3]
+# ll = LinkedList(lista)
+# print(ll.minimum())
+# print(ll.maximum())
