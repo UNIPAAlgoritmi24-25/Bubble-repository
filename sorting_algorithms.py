@@ -3,6 +3,7 @@ This module contains the implementation of various sorting algorithms.
 """
 
 from random import randint
+from random import shuffle
 import time
 import sys
 from utils import random_list
@@ -285,11 +286,13 @@ def performance_test(
 
             for run in range(n_of_runs):
                 # call the algo to sort the list and record the elapsed time
+                shuffle(values)
                 start_time = time.time()
                 algorithm(values)
                 end_time = time.time()
 
                 time_total += end_time - start_time
+                
 
             # append the mean time to algo's performance list
             time_mean = round(time_total / n_of_runs, 6)
