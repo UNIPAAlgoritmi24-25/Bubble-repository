@@ -1,12 +1,17 @@
 
 class LinkedListNode:
-    def __init__ (self, value, next):
+    def __init__ (self, value, next = None):
         self.value = value
         self.next = next
 
-    def  __str__ (self):
-        return ( "Node with value: " + str(self.value) + "\nNext:"+ str(self.next))
+    def __str__(self):
+        return str(self.value)
+
+    #def  __str__ (self):
+        #return ( "Node with value: " + str(self.value) + "\nNext:"+ str(self.next))
     
+
+
 
 class LinkedList:
     def __init__ (self,values_list =[]):
