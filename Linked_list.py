@@ -1,12 +1,17 @@
 
 class LinkedListNode:
-    def __init__ (self, value, next):
+    def __init__ (self, value, next = None):
         self.value = value
         self.next = next
 
-    def  __str__ (self):
-        return ( "Node with value: " + str(self.value) + "\nNext:"+ str(self.next))
+    def __str__(self):
+        return str(self.value)
+
+    #def  __str__ (self):
+        #return ( "Node with value: " + str(self.value) + "\nNext:"+ str(self.next))
     
+
+
 
 class LinkedList:
     def __init__ (self,values_list =[]):
@@ -29,3 +34,30 @@ class LinkedList:
     
     def __str__ (self):
         pass
+    
+    def minimum(self):
+        if not self.values_list:
+            return None
+        
+        min_value = self.values_list[0]
+        for value in self.values_list:
+            if value < min_value:
+                min_value = value
+        
+        return min_value
+
+    def maximum(self):
+        if not self.values_list:
+            return None
+            
+        max_value = self.values_list[0]
+        for value in self.values_list:
+            if value > max_value:
+                max_value = value
+            
+        return max_value
+    
+# lista = [1,5,8,9,3]
+# ll = LinkedList(lista)
+# print(ll.minimum())
+# print(ll.maximum())
