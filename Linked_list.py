@@ -14,26 +14,56 @@ class LinkedListNode:
 
 
 class LinkedList:
-    def __init__ (self,values_list =[]):
-        self.values_list = values_list
-        self.linked_list = []
-        #self.L.head = None
-        #attenzione indexerror
-        #gestire casi specifici
-        for n in range(len(self.values_list)):
-            if n == 0 and len(self.values_list) > 1:
-                self.L_head = LinkedListNode(self.values_list[0],self.values_list[1])
-                self.linked_list.append(self.L_head)
-            if n> 0 and n < (len(self.values_list) -1):
-                self.node = LinkedListNode(self.values_list[n],self.values_list[n+1])
-                self.linked_list.append (self.node)
-            if n == (len (self.values_list)-1):   
-                self.L_tail = LinkedListNode(self.values_list[-1], None)
-                self.linked_list.append (self.L_tail)
+    def __init__ (self, head = None):
+        self.head = head
 
     
-    def __str__ (self):
+    def __str__ (self): # avvalersi di una struttura ausiliaria per raccogliere i Nodi e fare un join?    
         pass
+
+
+    def insert_at_head(self, value):
+        node = LinkedListNode(value)
+        node.next = self.head
+        self.head = node
+
+
+    def minimum (self):
+        pass
+
+
+    def maximum (self):
+        pass
+
+
+    def successor (self, value):
+        current = self.head
+        succ = None
+        while current!= None:
+            if current.value > value:
+                if succ is None or current.value < succ.value:
+                    succ = current
+            current = current.next
+        return succ
+    
+
+    
+    def predecessor (self,value):
+        current = self.head
+        prec = None
+        while current != None:
+            if current.value < value:
+                if prec is None or current.value > prec:
+                    prec = current.value
+            current = current.next
+        return prec
+
+    
+
+
+
+
+
     
     def minimum(self):
         if not self.values_list:
@@ -57,7 +87,28 @@ class LinkedList:
             
         return max_value
     
-# lista = [1,5,8,9,3]
-# ll = LinkedList(lista)
-# print(ll.minimum())
-# print(ll.maximum())
+
+
+
+ll = LinkedList()
+ll.insert_at_head(2)
+ll.insert_at_head(10)
+ll.insert_at_head(5)
+
+
+print(ll.predecessor(10))
+print(ll.predecessor(5))
+print(ll.successor(2))
+
+
+
+
+ll2 = LinkedList()
+ll2.insert_at_head("pippo")
+ll2.insert_at_head("paperino")
+ll2.insert_at_head("pluto")
+
+print(ll2.successor("pippo"))
+ll2.insert_at_head("clarabella")
+print(ll2.predecessor("pippo"))
+print(ll2.predecessor("clarabella"))
