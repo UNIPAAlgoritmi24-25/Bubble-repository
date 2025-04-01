@@ -21,7 +21,37 @@ class LinkedList:
             current = current.next
         return result
     
-
+    @classmethod
+    def from_file(cls, filename):
+        """
+        Create a LinkedList from items in a file
+        """
+        linked_list = cls()
+        
+        try:
+            with open(filename, 'r') as file:
+                lines = file.readlines()
+            
+            #reads them backwards because it uses insert_at_head to create the list
+            for line in reversed(lines):
+                line = line.strip()
+                if not line:
+                    continue
+                    
+                try:
+                    value = int(line)
+                except ValueError:
+                    try:
+                        value = float(line)
+                    except ValueError:
+                        value = line
+                
+                linked_list.insert_at_head(value)
+            
+            return linked_list
+        except FileNotFoundError:
+            print(f"Error: the file '{filename}' was not found.")
+            return cls()
 
     def insert_at_head(self, value):
         node = LinkedListNode(value)
