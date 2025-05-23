@@ -58,7 +58,8 @@ class Directed_Graph:
 
 class Directed_Graph_Weighted:
     def __init__ (self, V, E):
-        self.vertex_set = V
+        self.vertex_set = [LinkedListNode(e) for e in V]
+        self.vertex_index=[e for e in V]
         self.edges_set = E
         self.adj_array = []
 
@@ -66,10 +67,9 @@ class Directed_Graph_Weighted:
         self.adj_array = [LinkedList() for _ in range(len(self.vertex_set))]
  
         for edge in self.edges_set:
+            v1,v2,weight = edge   
+            self.adj_array[self.vertex_index.index(v1)].insert_at_head(self.vertex_set[self.vertex_index.index(v2)])
 
-            v1,v2,weight = edge
-            self.adj_array[self.vertex_set.index(v1)].insert_at_head(v2)
-      
 
     
     def __str__(self):
