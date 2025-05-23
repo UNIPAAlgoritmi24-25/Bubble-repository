@@ -100,19 +100,25 @@ def dfs(G):
     
     for vertex in G.vertex_set:
         if vertex.color == 'white':
+         
             dfs_visit(G,vertex)
+            print(end='\n')
 
 def dfs_visit(G,vertex):
     vertex.color='grey'
+    print('('+str(vertex.value),end='')
     current=G.adj_array[G.vertex_index.index(vertex.value)].head
    
     while current.value != vertex.value:
         
         if current.color=='white':
+            
             dfs_visit(G,current)
         current=current.next
     vertex.color='black'
-    print(vertex.value)
+    print(str(vertex.value)+')', end='')
+   
+    
 
     #print(current.head.value, vertex.value)
 
