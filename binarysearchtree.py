@@ -1,141 +1,110 @@
-import random
-
 class Nodo:
-    def __init__(self,val):
-        self.val=val
-        self.parent=None
-        self.left=None
-        self.right=None
+    def __init__(self, val):
+        self.val = val
+        self.parent = None
+        self.left = None
+        self.right = None
 
-    def add(self,nodo):
-        if nodo.val < self.val:
-            if self.left:
-                self.left.add(nodo)
+
+class BinarySearchTree:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, val):
+        new_node = Nodo(val)
+        if not self.root:
+            self.root = new_node
+            return
+        current = self.root
+        while current:
+            if val < current.val:
+                if current.left:
+                    current = current.left
+                else:
+                    current.left = new_node
+                    new_node.parent = current
+                    return
             else:
-                self.left=nodo
-                self.left.parent=self
-        else:
-            if self.right:
-                self.right.add(nodo)
+                if current.right:
+                    current = current.right
+                else:
+                    current.right = new_node
+                    new_node.parent = current
+                    return
+
+    def _print(self, node, level=0):
+        if node:
+            print(' ' * level, node.val)
+            self._print(node.left, level + 1)
+            self._print(node.right, level + 1)
+
+    def print(self):
+        self._print(self.root)
+
+    def minimum(self, node=None):
+        if node is None:
+            node = self.root
+        while node.left:
+            node = node.left
+        return node
+
+    def maximum(self, node=None):
+        if node is None:
+            node = self.root
+        while node.right:
+            node = node.right
+        return node
+
+    def search(self, val):
+        current = self.root
+        while current:
+            if val == current.val:
+                return current
+            elif val < current.val:
+                current = current.left
             else:
-                self.right=nodo
-                self.right.parent=self
+                current = current.right
+        return None
 
-    def print(self, level=0):
-        print(' '*level,self.val)
-        if self.left:
-            self.left.print(level+1)
-        if self.right:
-            self.right.print(level+1)
-
-    def minimum(self):
-        if self.left:
-            self.left.minimum()
-        else:
-            return self
-    def maximum(self):
-        if self.right:
-            self.right.maximum()
-        else:
-            return self
-
-    def search(self,x):
-        if x > self.val:
-            if self.right:
-                return self.right.search(x)
-
-        elif x < self.val:
-            if self.left:
-                return self.left.search(x)
-
-        else:
-            current=self.parent
-            return self
-
-    def transplant(self,u,v):
-        if u.parent == None:
-            self= v
-            print('parent none')
+    def transplant(self, u, v):
+        if u.parent is None:
+            self.root = v
         elif u == u.parent.left:
             u.parent.left = v
-            print('parent sinistro')
         else:
             u.parent.right = v
-        if v != None:
-            v.parent=u.parent
+        if v:
+            v.parent = u.parent
 
-
-    def delete(self,v):
-        z=self.search(v)
-        if z.left == None:
-            self.transplant(z, z.right)
-        elif z.right == None:
-            self.transplant(z, z.left)
+    def delete(self, val):
+        node = self.search(val)
+        if not node:
+            return
+        if not node.left:
+            self.transplant(node, node.right)
+        elif not node.right:
+            self.transplant(node, node.left)
         else:
-            y=z.right.minimum()
-         
-            if y.parent != z:
-                self.transplant(y,y.right)
-                y.right = z.right
-                y.right.parent=y
-            
-            self.transplant(z,y)
-            y.left=z.left
-           
-            y.left.parent=y
-
- 
-         
-   
-           
-            
+            successor = self.minimum(node.right)
+            if successor.parent != node:
+                self.transplant(successor, successor.right)
+                successor.right = node.right
+                successor.right.parent = successor
+            self.transplant(node, successor)
+            successor.left = node.left
+            successor.left.parent = successor
 
 
-class binarysearchtree:
-    def __init__(self):
-        self.root=None
+# Esempio d'uso
+j = BinarySearchTree()
+for val in [15, 7, 18, 5, 14, 21, 17]:
+    j.insert(val)
 
-    def insert(self, x):
-        nodo=Nodo(x)
-        if self.root is None:
-            self.root=nodo
-        else:
-            self.root.add(nodo)
-    def print(self):
-        self.root.print()
-    def min(self):
-        self.root.minimum()
-    def max(self):
-        self.root.maximum()
-    def search(self,x):
-        return self.root.search(x)
-    def height(self):
-   
-        self.root.calculate_height()
-    def delete(self,x):
-        self.root.delete(x)
-
-
-
-j=binarysearchtree()
-
-j.insert(15)
-j.insert(7)
-j.insert(18)
-j.insert(5)
-j.insert(14)
-j.insert(21)
-j.insert(17)
 j.print()
-#j.min()
-#j.max()
-#print(j.search(7))
-#j.height()
-print('\n')
+print('\nDopo cancellazione:\n')
 j.delete(18)
 j.print()
+
 j.insert(23)
 j.insert(33)
-
-j.height()
 
