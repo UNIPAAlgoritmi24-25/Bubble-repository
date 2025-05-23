@@ -3,43 +3,35 @@ class LinkedListNode:
     def __init__(self, value, next=None):
         self.value = value
         self.next = next
-
-    def __str__(self):
-        return str(self.value)
+        self.color=None
 
 
 class LinkedList:
-    def __init__(self, head=None):
+    def __init__(self, head):
+        
         self.head = head
-    
-    def __str__(self):
-        current = self.head
-        result = ""
-        while current:
-            result += str(current.value)
-            if current.next: 
-                result += " -> "
-            current = current.next
-        return result
+      
     
     def insert_at_head(self, value):
-        node = LinkedListNode(value)
-        node.next = self.head
-        self.head = node
+
+        value.next = self.head
+        self.head = value
 
 
 
 class Directed_Graph:
     def __init__ (self, V, E):
-        self.vertex_set = V
+        self.vertex_set = [LinkedListNode(e) for e in V]
+        self.vertex_index=[e for e in V]
         self.edges_set = E
         self.adj_array = []
 
     def adj_list_representation (self):
-        self.adj_array = [LinkedList() for _ in range(len(self.vertex_set))]
+        self.adj_array = [LinkedList(self.vertex_set[i]) for i in range(len(self.vertex_set))]
+      
         for couple in self.edges_set:
-            v1,v2 = couple
-            self.adj_array[v1-1].insert_at_head(v2)
+            v1,v2 = couple   
+            self.adj_array[self.vertex_index.index(v1)].insert_at_head(self.vertex_set[self.vertex_index.index(v2)])
 
     
     def __str__(self):
@@ -72,9 +64,12 @@ class Directed_Graph_Weighted:
 
     def adj_list_representation (self):
         self.adj_array = [LinkedList() for _ in range(len(self.vertex_set))]
+ 
         for edge in self.edges_set:
+
             v1,v2,weight = edge
-            self.adj_array[v1-1].insert_at_head(v2)
+            self.adj_array[self.vertex_set.index(v1)].insert_at_head(v2)
+      
 
     
     def __str__(self):
@@ -98,12 +93,19 @@ class Directed_Graph_Weighted:
             adj_matrix[i - 1][j - 1] = random.randint(1,9)  
             
         return adj_matrix
-      
 
-V_G = [1,2,3,4,5,12]
+def dfs(G):
+    for vertex in G.vertex_set:
+        print(vertex)
+        
+
+
+V_G = [1,2,3,4,5,6,12]
 E_G = [(1,2),(3,4),(5,6),(2,1), (1,3)]
+
 D_g = Directed_Graph(V_G,E_G)
 D_g.adj_list_representation()
-print (D_g)
-m2 = D_g.random_adj_matrix(7,12)
-print(m2)
+#print (D_g)
+
+
+dfs(D_g)
