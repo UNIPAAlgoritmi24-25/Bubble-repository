@@ -1,4 +1,4 @@
-
+import random
 class LinkedListNode:
     def __init__(self, value, next=None):
         self.value = value
@@ -45,7 +45,7 @@ class Directed_Graph:
     def __str__(self):
         result = ""
         for i, linked_list in enumerate(self.adj_array):
-            result += str(i+1) + ":"+ str(linked_list)+ "\n"
+            result += str(self.vertex_set[i]) + ":"+ str(linked_list)+ "\n"
         return result
     
         
@@ -63,7 +63,42 @@ class Directed_Graph:
             adj_matrix[i - 1][j - 1] = 1  
             
         return adj_matrix
+
+class Directed_Graph_Weighted:
+    def __init__ (self, V, E):
+        self.vertex_set = V
+        self.edges_set = E
+        self.adj_array = []
+
+    def adj_list_representation (self):
+        self.adj_array = [LinkedList() for _ in range(len(self.vertex_set))]
+        for edge in self.edges_set:
+            v1,v2,weight = edge
+            self.adj_array[v1-1].insert_at_head(v2)
+
     
+    def __str__(self):
+        result = ""
+        for i, linked_list in enumerate(self.adj_array):
+            result +=  str(self.vertex_set[i]) + ":"+ str(linked_list)+ "\n"
+        return result
+    
+        
+    def random_adj_matrix(self, n_vertex, n_edges):
+        
+        adj_matrix = [[0 for _ in range(n_vertex)] for _ in range(n_vertex)]
+        random_couples = set()
+        
+        while len(random_couples) < n_edges:
+            couple = (random.randint(1, n_vertex), random.randint(1, n_vertex))
+            random_couples.add(couple)
+        
+        for couple in random_couples:
+            i, j = couple
+            adj_matrix[i - 1][j - 1] = random.randint(1,9)  
+            
+        return adj_matrix
+      
 
 V_G = [1,2,3,4,5,12]
 E_G = [(1,2),(3,4),(5,6),(2,1), (1,3)]
