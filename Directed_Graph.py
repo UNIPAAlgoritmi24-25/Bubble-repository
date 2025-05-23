@@ -96,16 +96,36 @@ class Directed_Graph_Weighted:
 
 def dfs(G):
     for vertex in G.vertex_set:
-        print(vertex)
+        vertex.color='white'
+    
+    for vertex in G.vertex_set:
+        if vertex.color == 'white':
+            dfs_visit(G,vertex)
+
+def dfs_visit(G,vertex):
+    vertex.color='grey'
+    current=G.adj_array[G.vertex_index.index(vertex.value)].head
+   
+    while current.value != vertex.value:
         
+        if current.color=='white':
+            dfs_visit(G,current)
+        current=current.next
+    vertex.color='black'
+    print(vertex.value)
+
+    #print(current.head.value, vertex.value)
+
 
 
 V_G = [1,2,3,4,5,6,12]
-E_G = [(1,2),(3,4),(5,6),(2,1), (1,3)]
+E_G = [(1,2),(2,3),(3,4),(5,6),(6,12)]
 
 D_g = Directed_Graph(V_G,E_G)
+
+
 D_g.adj_list_representation()
+dfs(D_g)
 #print (D_g)
 
 
-dfs(D_g)
