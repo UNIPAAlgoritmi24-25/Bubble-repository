@@ -64,12 +64,52 @@ class Undirected_Graph:
             adj_matrix[j - 1][i - 1] = 1  
             
         return adj_matrix
-    
 
-V_G = [1,2,3,4,5,12]
-E_G = [(1,2),(3,4),(5,6),(2,1), (1,3)]
-D_g = Undirected_Graph(V_G,E_G)
+class Undirected_Graph_Weighted:
+    def __init__ (self, V, E):
+        self.vertex_set = V
+        self.edges_set = E
+        self.adj_array = []
+
+    def adj_list_representation (self):
+        self.adj_array = [LinkedList() for _ in range(len(self.vertex_set))]
+     
+        for edge in self.edges_set:
+            v1,v2,weight = edge
+            
+            self.adj_array[self.vertex_set.index(v1)].insert_at_head(v2)
+            self.adj_array[self.vertex_set.index(v2)].insert_at_head(v1)
+
+    
+    def __str__(self):
+        result = ""
+        for i,linked_list in enumerate(self.adj_array):
+         
+            result += str(self.vertex_set[i]) + "->"+ str(linked_list)+ "\n"
+            if i > len(self.edges_set):
+                break
+        return result
+    
+        
+    def random_adj_matrix(self, n_vertex, n_edges):
+        
+        adj_matrix = [[0 for _ in range(n_vertex)] for _ in range(n_vertex)]
+        random_couples = set()
+        
+        while len(random_couples) < n_edges:
+            couple = (random.randint(1, n_vertex), random.randint(1, n_vertex))
+            random_couples.add(couple)
+        
+        for couple in random_couples:
+            i, j = couple
+            val= random.randint(1,9)  
+            adj_matrix[i - 1][j - 1] =val
+            adj_matrix[j - 1][i -1 ] =val
+            
+        return adj_matrix
+
+V=[1,2,34,3]
+E=[(1,2,3),(2,3,3),(3,34,3)]
+D_g = Undirected_Graph_Weighted(V,E)
 D_g.adj_list_representation()
 print (D_g)
-m2 = D_g.random_adj_matrix(7,12)
-print(m2)
