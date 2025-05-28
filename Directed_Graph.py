@@ -163,12 +163,40 @@ class min_heap:
     def __init__(self):
         self.heap=[]
         self.heap_size=0
+    def minimum(self):
+        return self.heap[0]
     def parent(self,i):
         return self.heap[int(i/2)]
     def left(self,i):
         return self.heap[2*i]
     def right(self, i):
         return self.heap[(2*i)+1]
+    def min_heapify(self,i):
+        A=self.heap 
+        if self.left(i) > self.right(i):
+            current=self.left(i)
+            if current < A[i]:
+                A[i], current= current, A[i]
+                self.min_heapify(2*i)
+            else:
+                self.min_heapify(2*i)
+        else:
+            current=self.right(i)
+            if current< A[i]:
+                A[i],current=current,A[i]
+                self.min_heapify((2*i)+1)
+            else:
+                self.min_heapify((2*i)+1)
+    def extract_minimu(self):
+        min=self.minimum()
+        A=self.heap
+        A[0]=A[self.heap_size]
+        self.heap_size-=1
+
+        self.min_heapify(self.heap_size)
+        return min
+
+                
 
     
 def djkstra(G,s):
