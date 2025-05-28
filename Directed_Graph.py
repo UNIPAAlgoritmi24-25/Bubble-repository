@@ -4,6 +4,7 @@ class LinkedListNode:
         self.value = value
         self.next = next
         self.color=None
+        self.f=0
 
 
 class LinkedList:
@@ -55,6 +56,17 @@ class Directed_Graph:
             adj_matrix[i - 1][j - 1] = 1  
             
         return adj_matrix
+    def transposed_graph(self):
+        new_edges=[(y,x) for (x,y) in self.edges_set]
+        t_g=Directed_Graph(self.vertex_index, new_edges)
+        t_g.adj_list_representation()
+        
+        return t_g
+    
+    def connected_components(self):
+        dfs(self)
+        t_g=self.transposed_graph()
+        dfs(t_g)
 
 class Directed_Graph_Weighted:
     def __init__ (self, V, E):
@@ -94,28 +106,38 @@ class Directed_Graph_Weighted:
             
         return adj_matrix
 
+
+global u_f
+u_f=0
 def dfs(G):
     for vertex in G.vertex_set:
         vertex.color='white'
     
+
     for vertex in G.vertex_set:
         if vertex.color == 'white':
-         
+            
             dfs_visit(G,vertex)
+          
             print(end='\n')
 
 def dfs_visit(G,vertex):
+    global u_f
     vertex.color='grey'
     print('('+str(vertex.value),end='')
     current=G.adj_array[G.vertex_index.index(vertex.value)].head
-   
+    
     while current.value != vertex.value:
         
         if current.color=='white':
             
             dfs_visit(G,current)
         current=current.next
+      
+        
     vertex.color='black'
+    u_f=u_f+1
+    vertex.f=u_f
     print(str(vertex.value)+')', end='')
    
     
@@ -132,6 +154,11 @@ D_g = Directed_Graph(V_G,E_G)
 
 D_g.adj_list_representation()
 dfs(D_g)
+for vertex in D_g.vertex_set:
+    print(vertex.f)
+
+#D_g.connected_components()
+
 #print (D_g)
 
 

@@ -8,7 +8,7 @@ def main():
     t_1 = "Comparing sorting algorithms performances"
     st.title(t_1)
 
-    input_sizes = (10, 100, 1000)
+    input_sizes = (10, 100, 1000, 2000, 3000)
     n_of_runs = 10
 
     # Performance calculation
