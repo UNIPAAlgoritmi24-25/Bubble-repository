@@ -166,37 +166,49 @@ class min_heap:
     def minimum(self):
         return self.heap[0]
     def parent(self,i):
-        return self.heap[int(i/2)]
+        return (i-1) // 2
     def left(self,i):
-        return self.heap[2*i]
+        return (2*i)+1
     def right(self, i):
-        return self.heap[(2*i)+1]
+        return (2*i)+2
     def min_heapify(self,i):
         A=self.heap 
-        if self.left(i) > self.right(i):
-            current=self.left(i)
-            if current < A[i]:
-                A[i], current= current, A[i]
-                self.min_heapify(2*i)
-            else:
-                self.min_heapify(2*i)
-        else:
-            current=self.right(i)
-            if current< A[i]:
-                A[i],current=current,A[i]
-                self.min_heapify((2*i)+1)
-            else:
-                self.min_heapify((2*i)+1)
-    def extract_minimu(self):
-        min=self.minimum()
-        A=self.heap
-        A[0]=A[self.heap_size]
-        self.heap_size-=1
+        left=self.left(i)
+        right=self.right(i)
+        
+        p = i 
 
-        self.min_heapify(self.heap_size)
-        return min
+        if left < self.heap_size and A[left] < A[p]:
+            p = left
 
-                
+        if right < self.heap_size and A[right] < A[p]:
+            p = right
+
+  
+        if p != i:
+            A[i], A[p] = A[p], A[i] 
+            self.min_heapify(p)
+
+    def extract_minimum(self):
+        min_val = self.minimum() 
+        A = self.heap
+
+       
+        A[0] = A[self.heap_size - 1]
+        A.pop()
+        self.heap_size -= 1 
+        self.min_heapify(0)
+        return min_val
+    
+    def insert(self,value):
+        self.heap_size += 1
+        self.heap.append(value)
+        current=self.heap_size-1
+
+        while current > 0 and self.heap[self.parent(current)] > self.heap[current]:
+            parent = self.parent(current)
+            self.heap[current], self.heap[parent] = self.heap[parent], self.heap[current]
+            current = parent
 
     
 def djkstra(G,s):
@@ -220,8 +232,15 @@ D_g.adj_list_representation()
 #for vertex in D_g.vertex_set:
  #   print(vertex.f)
 
-D_g.connected_components()
+#D_g.connected_components()
+a=min_heap()
+a.insert(5)
+a.insert(7)
+a.insert(3)
 
+print(a.heap)
+print(a.extract_minimum())
+print(a.heap)
 #print (D_g)
 
 
