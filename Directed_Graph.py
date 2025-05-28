@@ -5,6 +5,8 @@ class LinkedListNode:
         self.next = next
         self.color=None
         self.f=0
+        self.d=None
+        self.prev=None
 
 
 class LinkedList:
@@ -147,9 +149,6 @@ def dfs_visit(G,vertex, update_end=1):
         
         current=current.next
     
-
-      
-        
     vertex.color='black'
     if update_end==1:
         u_f=u_f+1
@@ -159,6 +158,24 @@ def dfs_visit(G,vertex, update_end=1):
     
 
     #print(current.head.value, vertex.value)
+
+class min_heap:
+    def __init__(self):
+        self.heap=[]
+        self.heap_size=0
+    def parent(self,i):
+        return self.heap[int(i/2)]
+    def left(self,i):
+        return self.heap[2*i]
+    def right(self, i):
+        return self.heap[(2*i)+1]
+
+    
+def djkstra(G,s):
+    for vertex in G.vertex_set: 
+        vertex.d=999
+        vertex.prev=None 
+    
 
 
 
