@@ -64,9 +64,11 @@ class Directed_Graph:
         return t_g
     
     def connected_components(self):
-        dfs(self)
+        dfs(self, False)
         t_g=self.transposed_graph()
-        dfs(t_g)
+        t_g.vertex_set=self.vertex_set
+       
+        dfs(t_g, True)
 
 class Directed_Graph_Weighted:
     def __init__ (self, V, E):
@@ -107,21 +109,30 @@ class Directed_Graph_Weighted:
         return adj_matrix
 
 
-global u_f
-u_f=0
-def dfs(G):
+
+def dfs(G, f_order=False):
     for vertex in G.vertex_set:
         vertex.color='white'
     
+    global u_f
+    u_f=0
+    if f_order == False:
 
-    for vertex in G.vertex_set:
-        if vertex.color == 'white':
+        for vertex in G.vertex_set:
+            if vertex.color == 'white':
+                
+                dfs_visit(G,vertex)
             
-            dfs_visit(G,vertex)
-          
-            print(end='\n')
+                print(end='\n')
+    else:
+      
+        for vertex in sorted(G.vertex_set, key=lambda x: x.f):
+            if vertex.color == 'white':
+                dfs_visit(G,vertex, 0)
+            
+                print(end='\n')
 
-def dfs_visit(G,vertex):
+def dfs_visit(G,vertex, update_end=1):
     global u_f
     vertex.color='grey'
     print('('+str(vertex.value),end='')
@@ -136,8 +147,9 @@ def dfs_visit(G,vertex):
       
         
     vertex.color='black'
-    u_f=u_f+1
-    vertex.f=u_f
+    if update_end==1:
+        u_f=u_f+1
+        vertex.f=u_f
     print(str(vertex.value)+')', end='')
    
     
@@ -153,11 +165,12 @@ D_g = Directed_Graph(V_G,E_G)
 
 
 D_g.adj_list_representation()
-dfs(D_g)
-for vertex in D_g.vertex_set:
-    print(vertex.f)
 
-#D_g.connected_components()
+
+#for vertex in D_g.vertex_set:
+ #   print(vertex.f)
+
+D_g.connected_components()
 
 #print (D_g)
 
