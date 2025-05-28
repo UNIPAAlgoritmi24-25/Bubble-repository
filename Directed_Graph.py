@@ -210,7 +210,9 @@ class min_heap:
             self.heap[current], self.heap[parent] = self.heap[parent], self.heap[current]
             current = parent
 
-    
+    def decrease_key(self,x,k):
+        if k < self.heap.index(x):
+            
 def djkstra(G,s):
     for vertex in G.vertex_set: 
         vertex.d=999
