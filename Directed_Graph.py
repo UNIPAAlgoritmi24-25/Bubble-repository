@@ -67,7 +67,7 @@ class Directed_Graph:
         dfs(self, False)
         t_g=self.transposed_graph()
         t_g.vertex_set=self.vertex_set
-       
+
         dfs(t_g, True)
 
 class Directed_Graph_Weighted:
@@ -137,13 +137,17 @@ def dfs_visit(G,vertex, update_end=1):
     vertex.color='grey'
     print('('+str(vertex.value),end='')
     current=G.adj_array[G.vertex_index.index(vertex.value)].head
+    s=[]
+    while current is not None and current.value not in s:
     
-    while current.value != vertex.value:
+        s.append(current.value)
         
         if current.color=='white':
-            
             dfs_visit(G,current)
+        
         current=current.next
+    
+
       
         
     vertex.color='black'
@@ -159,12 +163,13 @@ def dfs_visit(G,vertex, update_end=1):
 
 
 V_G = [1,2,3,4,5,6,12]
-E_G = [(1,2),(2,3),(3,4),(5,6),(6,12)]
+E_G = [(1,2),(2,3),(3,4), (5,4)]
 
 D_g = Directed_Graph(V_G,E_G)
 
 
 D_g.adj_list_representation()
+
 
 
 #for vertex in D_g.vertex_set:
