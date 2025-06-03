@@ -141,8 +141,7 @@ def dfs_visit(G,vertex, update_end=1):
     current=G.adj_array[G.vertex_index.index(vertex.value)].head
     s=[]
     while current is not None and current.value not in s:
-        i=self.parent(i)
-
+       
         s.append(current.value)
         
         if current.color=='white':
@@ -221,6 +220,8 @@ def relax(u,v,w):
     if v.d > u.d+w:
         v.d=u.d+w
         v.prev=u
+        return True 
+    return False
 
 
 def djkstra(G,s):
@@ -232,18 +233,21 @@ def djkstra(G,s):
     Q=min_heap()
     for vertex in G.vertex_set:
         Q.insert(vertex)
+        
     while len(Q.heap) != 0:
         u=Q.extract_minimum()
         S.add(u)
-        print(u.value)
+        print(u)
+        current=G.vertex_set[G.vertex_index.index(u.value)]
+        while current:
+            for (x,y,w) in G.edges_set:
+                print(x,y,w)
+            relax(u,current,)
+            current=current.next
      
 
 V_G = [1,2,3,4,5,6,12]
 E_G = [(1,2,3),(2,3,5),(3,4,6), (5,4,7)]
 
 D_g = Directed_Graph_Weighted(V_G,E_G)
-
-
-D_g.adj_list_representation()
-djkstra(D_g, D_g.vertex_set[0])
-
+djkstra(D_g, D_g.vertex_set[0] )
