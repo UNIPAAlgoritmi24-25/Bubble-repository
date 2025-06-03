@@ -232,9 +232,11 @@ def djkstra(G,s):
     Q=min_heap()
     for vertex in G.vertex_set:
         Q.insert(vertex)
-    print(Q.extract_minimum().d)
-
-
+    while len(Q.heap) != 0:
+        u=Q.extract_minimum()
+        S.add(u)
+        print(u.value)
+     
 
 V_G = [1,2,3,4,5,6,12]
 E_G = [(1,2,3),(2,3,5),(3,4,6), (5,4,7)]
