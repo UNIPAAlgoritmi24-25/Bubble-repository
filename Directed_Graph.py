@@ -80,7 +80,7 @@ class Directed_Graph_Weighted:
         self.adj_array = []
 
     def adj_list_representation (self):
-        self.adj_array = [LinkedList() for _ in range(len(self.vertex_set))]
+        self.adj_array = [LinkedList(self.vertex_set[i]) for i in range(len(self.vertex_set))]
  
         for edge in self.edges_set:
             v1,v2,weight = edge   
@@ -141,7 +141,8 @@ def dfs_visit(G,vertex, update_end=1):
     current=G.adj_array[G.vertex_index.index(vertex.value)].head
     s=[]
     while current is not None and current.value not in s:
-    
+        i=self.parent(i)
+
         s.append(current.value)
         
         if current.color=='white':
@@ -178,10 +179,10 @@ class min_heap:
         
         p = i 
 
-        if left < self.heap_size and A[left] < A[p]:
+        if left < self.heap_size and A[left].d < A[p].d:
             p = left
 
-        if right < self.heap_size and A[right] < A[p]:
+        if right < self.heap_size and A[right].d < A[p].d:
             p = right
 
   
@@ -209,46 +210,38 @@ class min_heap:
 
 
     def decrease_key(self,x,k):
-        if k < x:
+        if k.d < x:
             i=self.heap.index(k)
-            while i > 0 and self.heap[self.parent(i)] > self.heap[i]:
+            while i > 0 and self.heap[self.parent(i)].d > self.heap[i].d:
                 self.heap[i], self.heap[self.parent(i)] = self.heap[self.parent(i)], self.heap[i]
                 i=self.parent(i)
+
+
+def relax(u,v,w):
+    if v.d > u.d+w:
+        v.d=u.d+w
+        v.prev=u
 
 
 def djkstra(G,s):
     for vertex in G.vertex_set: 
         vertex.d=999
         vertex.prev=None 
-    
+    s.d=0
+    S=set()
+    Q=min_heap()
+    for vertex in G.vertex_set:
+        Q.insert(vertex)
+    print(Q.extract_minimum().d)
 
 
 
 V_G = [1,2,3,4,5,6,12]
-E_G = [(1,2),(2,3),(3,4), (5,4)]
+E_G = [(1,2,3),(2,3,5),(3,4,6), (5,4,7)]
 
-D_g = Directed_Graph(V_G,E_G)
+D_g = Directed_Graph_Weighted(V_G,E_G)
 
 
 D_g.adj_list_representation()
-
-
-
-#for vertex in D_g.vertex_set:
- #   print(vertex.f)
-
-#D_g.connected_components()
-a=min_heap()
-a.insert(5)
-a.insert(7)
-a.insert(-3)
-a.insert(2)
-a.insert(6)
-
-a.insert(1)
-a.insert(-2)
-print(a.heap)
-
-#print (D_g)
-
+djkstra(D_g, D_g.vertex_set[0])
 
