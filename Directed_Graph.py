@@ -203,16 +203,19 @@ class min_heap:
     def insert(self,value):
         self.heap_size += 1
         self.heap.append(value)
-        current=self.heap_size-1
+        self.decrease_key(999,value)
 
-        while current > 0 and self.heap[self.parent(current)] > self.heap[current]:
-            parent = self.parent(current)
-            self.heap[current], self.heap[parent] = self.heap[parent], self.heap[current]
-            current = parent
+
+
 
     def decrease_key(self,x,k):
-        if k < self.heap.index(x):
-            
+        if k < x:
+            i=self.heap.index(k)
+            while i > 0 and self.heap[self.parent(i)] > self.heap[i]:
+                self.heap[i], self.heap[self.parent(i)] = self.heap[self.parent(i)], self.heap[i]
+                i=self.parent(i)
+
+
 def djkstra(G,s):
     for vertex in G.vertex_set: 
         vertex.d=999
@@ -238,11 +241,15 @@ D_g.adj_list_representation()
 a=min_heap()
 a.insert(5)
 a.insert(7)
-a.insert(3)
+a.insert(-3)
+a.insert(2)
+a.insert(6)
+a.insert(-8)
 
+a.insert(1)
+a.insert(-2)
 print(a.heap)
-print(a.extract_minimum())
-print(a.heap)
+
 #print (D_g)
 
 
