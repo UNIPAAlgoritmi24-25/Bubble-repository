@@ -217,6 +217,7 @@ class min_heap:
 
 
 def relax(u,v,w):
+    #print(v.d, u.d, w)
     if v.d > u.d+w:
         v.d=u.d+w
         v.prev=u
@@ -226,7 +227,7 @@ def relax(u,v,w):
 
 def djkstra(G,s):
     for vertex in G.vertex_set: 
-        vertex.d=999
+        vertex.d=float('inf')
         vertex.prev=None 
     s.d=0
     S=set()
@@ -236,18 +237,29 @@ def djkstra(G,s):
         
     while len(Q.heap) != 0:
         u=Q.extract_minimum()
+        
         S.add(u)
-        print(u)
-        current=G.vertex_set[G.vertex_index.index(u.value)]
-        while current:
-            for (x,y,w) in G.edges_set:
-                print(x,y,w)
-            relax(u,current,)
-            current=current.next
+     
+        adj_head=G.adj_array[G.vertex_index.index(u.value)].head
+        print(adj_head.value, u.value)
+        while adj_head:
+            for x, y, w in G.edges_set:
+                if x == u.value and y == adj_head.value:
+                    print('correct')
+                    if relax(u, adj_head,w):
+                        Q.decrease_key(float('inf'), adj_head)
+            
+
+            #print(G.edges_set[:][:1].index((u.value, adj_head.value)))
+            #print(u.value, adj_head.value)
+           
+            adj_head=adj_head.next
      
 
 V_G = [1,2,3,4,5,6,12]
-E_G = [(1,2,3),(2,3,5),(3,4,6), (5,4,7)]
+E_G = [(1,2,3),(2,3,5),(3,4,6), (5,6,7)]
 
 D_g = Directed_Graph_Weighted(V_G,E_G)
-djkstra(D_g, D_g.vertex_set[0] )
+D_g.adj_list_representation()
+djkstra(D_g, D_g.vertex_set[0])
+print(D_g.vertex_set[1].d)
