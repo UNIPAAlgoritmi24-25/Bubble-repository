@@ -244,7 +244,6 @@ a.insert(7)
 a.insert(-3)
 a.insert(2)
 a.insert(6)
-a.insert(-8)
 
 a.insert(1)
 a.insert(-2)
