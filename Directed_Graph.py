@@ -257,9 +257,9 @@ def djkstra(G,s):
      
 
 V_G = [1,2,3,4,5,6,12]
-E_G = [(1,2,3),(2,3,5),(3,4,6), (5,6,7)]
+E_G = [(1,2,3),(1,3,2),(2,3,5),(3,4,6), (5,6,7)]
 
 D_g = Directed_Graph_Weighted(V_G,E_G)
 D_g.adj_list_representation()
 djkstra(D_g, D_g.vertex_set[0])
-print(D_g.vertex_set[1].d)
+print(D_g.vertex_set[2].d)
