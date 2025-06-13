@@ -103,6 +103,28 @@ def main():
                                     for val in random_list:
                                         bst.search(val)
                                     end=time.time()
+                        case 'Arr':
+                            match operation:
+                                case 'insert':
+                                    new=[]
+                                    start=time.time()
+                                    for val in random_list:
+                                        new.append(val)
+                                    end=time.time()
+                                case 'search':
+                                    new=[]
+                                    
+                                    for val in random_list:
+                                        new.append(val)
+                                    random.shuffle(new)
+                                    
+                                    start=time.time()
+                                    for val_to_search in random_list:
+                                        for val in new:
+                                            if val == val_to_search:
+                                                break
+                                    end=time.time()
+
 
 
 
