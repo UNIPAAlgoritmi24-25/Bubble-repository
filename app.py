@@ -2,13 +2,18 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import pandas as pd
 import sorting_algorithms as sorting
-
+import Linked_list
+import binarysearchtree
+from io import StringIO
+import random
+import time
 
 def main():
+
     t_1 = "Comparing sorting algorithms performances"
     st.title(t_1)
 
-    input_sizes = (10, 100, 1000, 2000, 3000)
+    input_sizes = (10, 100, 1000)
     n_of_runs = 10
 
     # Performance calculation
@@ -37,7 +42,49 @@ def main():
     ax.grid(True)
 
     st.pyplot(fig)
+    '''
+    file=st.file_uploader('inserisci file txt')
+    if st.button('Carica'):
+        data = StringIO(file.getvalue().decode("utf-8"))
+        string_data=data.read()
+        to_use=list(string_data.split(','))
+    '''
+    LL={}
+    operations=['insert','search']
 
+    for input in input_sizes:
+        samples=[]
+        for operation in operations:
+            for k in range(10):
+                random_list=[random.randint(1,input) for x in range(input)]
+                #inserimento, cancellazione, search
+                
+                
+                match operation:
+                    case 'insert':
+                        start=time.time()
+
+                        L=Linked_list.LinkedList()
+                        for val in random_list:
+                            L.insert_at_head(val)
+            
+                        end=time.time()
+                    case 'search':
+                        L=Linked_list.LinkedList()
+                        for val in random_list:
+                            L.insert_at_head(val)
+
+                        start=time.time()
+                        random.shuffle(random_list)
+                        for val in random_list:
+                            L.search(val)
+                        end=time.time()
+                
+
+                samples.append(end-start)
+            LL[operation]=sum(samples)/len(samples)
+        
+    print(LL)
 
 if __name__ == "__main__":
     main()
