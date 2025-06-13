@@ -49,41 +49,71 @@ def main():
         string_data=data.read()
         to_use=list(string_data.split(','))
     '''
-    LL={}
+    LL={'LL': {}, 'BST': {}, 'Arr': {}}
+    
     operations=['insert','search']
 
     for input in input_sizes:
         samples=[]
-        for operation in operations:
-            for k in range(10):
-                random_list=[random.randint(1,input) for x in range(input)]
-                #inserimento, cancellazione, search
-                
-                
-                match operation:
-                    case 'insert':
-                        start=time.time()
+        for DS in LL.keys():
+            for operation in operations:
+                for k in range(10):
+                    random_list=[random.randint(1,input) for x in range(input)]
+                    #inserimento, cancellazione, search
+                    
+                    
+                    match DS:
+                        case 'LL':
+                            match operation:
+                                
+                                case 'insert':
+                                    start=time.time()
 
-                        L=Linked_list.LinkedList()
-                        for val in random_list:
-                            L.insert_at_head(val)
+                                    L=Linked_list.LinkedList()
+                                    for val in random_list:
+                                        L.insert_at_head(val)
+                        
+                                    end=time.time()
+                                case 'search':
+                                    L=Linked_list.LinkedList()
+                                    for val in random_list:
+                                        L.insert_at_head(val)
+
+                                    start=time.time()
+                                    random.shuffle(random_list)
+                                    for val in random_list:
+                                        L.search(val)
+                                    end=time.time()
+
+                        case 'BST':
+                            match operation:
+                                case 'insert':
+                                    start=time.time()
+                                    bst=binarysearchtree.BinarySearchTree()
+                                    for val in random_list:
+                                        bst.insert(val)
+                                    end=time.time()
+                                case 'search':
+                                    bst=binarysearchtree.BinarySearchTree()
+                                    for val in random_list:
+                                        bst.insert(val)
+                                    
+                                    start=time.time()
+                                    random.shuffle(random_list)
+                                    for val in random_list:
+                                        bst.search(val)
+                                    end=time.time()
+
+
+
+                    samples.append(end-start)
+                if operation in LL[DS].keys():
+                    LL[DS][operation].append(sum(samples)/len(samples))
+
+                        
+                else:    
+                    LL[DS][operation]=[sum(samples)/len(samples)]
             
-                        end=time.time()
-                    case 'search':
-                        L=Linked_list.LinkedList()
-                        for val in random_list:
-                            L.insert_at_head(val)
-
-                        start=time.time()
-                        random.shuffle(random_list)
-                        for val in random_list:
-                            L.search(val)
-                        end=time.time()
-                
-
-                samples.append(end-start)
-            LL[operation]=sum(samples)/len(samples)
-        
     print(LL)
 
 if __name__ == "__main__":

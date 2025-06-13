@@ -27,6 +27,7 @@ class LinkedList:
         node = LinkedListNode(value)
         node.next = self.head
         self.head = node
+    
 
 
     

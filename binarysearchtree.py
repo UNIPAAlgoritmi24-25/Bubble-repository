@@ -96,15 +96,4 @@ class BinarySearchTree:
 
 
 # Esempio d'uso
-j = BinarySearchTree()
-for val in [15, 7, 18, 5, 14, 21, 17]:
-    j.insert(val)
-
-j.print()
-print('\nDopo cancellazione:\n')
-j.delete(18)
-j.print()
-
-j.insert(23)
-j.insert(33)
 
