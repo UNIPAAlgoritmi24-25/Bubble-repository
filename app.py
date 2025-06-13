@@ -8,49 +8,8 @@ from io import StringIO
 import random
 import time
 
-def main():
-
-    t_1 = "Comparing sorting algorithms performances"
-    st.title(t_1)
-
-    input_sizes = (10, 100, 1000)
-    n_of_runs = 10
-
-    # Performance calculation
-    with st.spinner("Calculating..."):
-        results = sorting.performance_test(input_sizes, n_of_runs)
-
-    st.subheader("Table of results (avg time in seconds)")
-    st.write("Sizes tested:", input_sizes)
-    st.write("Average calculated on:", n_of_runs, "runs")
-
-    # Create a df to show the results
-    df = pd.DataFrame(results, index=input_sizes)
-    df.index.name = "Input size"
-    st.dataframe(df)
-
-    # Plot the results
-    fig, ax = plt.subplots(figsize=(8, 5))
-
-    for algo_name, times in results.items():
-        ax.plot(input_sizes, times, marker="o", label=algo_name)
-
-    ax.set_xlabel("Input size")
-    ax.set_ylabel("Avg time (s)")
-    ax.set_title(t_1)
-    ax.legend()
-    ax.grid(True)
-
-    st.pyplot(fig)
-    '''
-    file=st.file_uploader('inserisci file txt')
-    if st.button('Carica'):
-        data = StringIO(file.getvalue().decode("utf-8"))
-        string_data=data.read()
-        to_use=list(string_data.split(','))
-    '''
+def Ds_benchmark(input_sizes):
     LL={'LL': {}, 'BST': {}, 'Arr': {}}
-    
     operations=['insert','search']
 
     for input in input_sizes:
@@ -59,13 +18,10 @@ def main():
             for operation in operations:
                 for k in range(10):
                     random_list=[random.randint(1,input) for x in range(input)]
-                    #inserimento, cancellazione, search
-                    
                     
                     match DS:
                         case 'LL':
                             match operation:
-                                
                                 case 'insert':
                                     start=time.time()
 
@@ -117,26 +73,66 @@ def main():
                                     for val in random_list:
                                         new.append(val)
                                     random.shuffle(new)
-                                    
+
                                     start=time.time()
                                     for val_to_search in random_list:
                                         for val in new:
                                             if val == val_to_search:
                                                 break
                                     end=time.time()
-
-
-
-
                     samples.append(end-start)
+
                 if operation in LL[DS].keys():
                     LL[DS][operation].append(sum(samples)/len(samples))
-
                         
                 else:    
                     LL[DS][operation]=[sum(samples)/len(samples)]
+    return LL
             
-    print(LL)
+def main():
+
+    t_1 = "Comparing sorting algorithms performances"
+    st.title(t_1)
+
+    input_sizes = (10, 100, 1000)
+    n_of_runs = 10
+
+    # Performance calculation
+    with st.spinner("Calculating..."):
+        results = sorting.performance_test(input_sizes, n_of_runs)
+
+    st.subheader("Table of results (avg time in seconds)")
+    st.write("Sizes tested:", input_sizes)
+    st.write("Average calculated on:", n_of_runs, "runs")
+
+    # Create a df to show the results
+    df = pd.DataFrame(results, index=input_sizes)
+    df.index.name = "Input size"
+    st.dataframe(df)
+
+    # Plot the results
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    for algo_name, times in results.items():
+        ax.plot(input_sizes, times, marker="o", label=algo_name)
+
+    ax.set_xlabel("Input size")
+    ax.set_ylabel("Avg time (s)")
+    ax.set_title(t_1)
+    ax.legend()
+    ax.grid(True)
+
+    st.pyplot(fig)
+    '''
+    file=st.file_uploader('inserisci file txt')
+    if st.button('Carica'):
+        data = StringIO(file.getvalue().decode("utf-8"))
+        string_data=data.read()
+        to_use=list(string_data.split(','))
+    '''
+    Performance=Ds_benchmark(input_sizes)
+    print(Performance)
+
 
 if __name__ == "__main__":
     main()
