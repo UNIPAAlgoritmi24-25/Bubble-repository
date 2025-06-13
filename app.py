@@ -161,15 +161,25 @@ def main():
     ax.grid(True)
 
     st.pyplot(fig)
-    '''
-    file=st.file_uploader('inserisci file txt')
-    if st.button('Carica'):
-        data = StringIO(file.getvalue().decode("utf-8"))
-        string_data=data.read()
-        to_use=list(string_data.split(','))
-    '''
+   
+    st.subheader("Datastructures benchmark")
+
+    input_sizes=(10,100,1000,2000,3000,4000)
     Performance=Ds_benchmark(input_sizes)
-    print(Performance)
+
+    operations=['insert','search','delete']
+    for operation in operations:
+        fig, ax = plt.subplots(figsize=(8, 5))
+
+        for DS in Performance.keys():
+            ax.plot(input_sizes,Performance[DS][operation], marker='o',label=f'{DS} {operation}')
+        
+        ax.set_xlabel("Input size")
+        ax.set_ylabel("Avg time (s)")
+        ax.legend()
+        st.pyplot(fig)
+            
+
 
 
 if __name__ == "__main__":
