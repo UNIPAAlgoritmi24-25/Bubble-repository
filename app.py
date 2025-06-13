@@ -7,10 +7,10 @@ import binarysearchtree
 from io import StringIO
 import random
 import time
-
+import HTLL
 def Ds_benchmark(input_sizes):
     LL={'LL': {}, 'BST': {}, 'Arr': {}}
-    operations=['insert','search']
+    operations=['insert','search','delete']
 
     for input in input_sizes:
         samples=[]
@@ -40,6 +40,17 @@ def Ds_benchmark(input_sizes):
                                     for val in random_list:
                                         L.search(val)
                                     end=time.time()
+                                case 'delete':
+                                    L=HTLL.LinkedList()
+                                    for val in random_list:
+                                        L.insert_at_head(val)
+                                    random.shuffle(random_list)
+                                    start=time.time()
+                                    for val in random_list:
+                                        L.delete(val)
+                                    end=time.time()
+
+                                    
 
                         case 'BST':
                             match operation:
@@ -59,6 +70,19 @@ def Ds_benchmark(input_sizes):
                                     for val in random_list:
                                         bst.search(val)
                                     end=time.time()
+                                case 'delete':
+                                    bst=binarysearchtree.BinarySearchTree()
+                                    for val in random_list:
+                                        bst.insert(val)
+                                    
+                                    start=time.time()
+                                    random.shuffle(random_list)
+                                    for val in random_list:
+                                        bst.delete(val)
+                                    end=time.time()
+
+
+                              
                         case 'Arr':
                             match operation:
                                 case 'insert':
@@ -80,6 +104,20 @@ def Ds_benchmark(input_sizes):
                                             if val == val_to_search:
                                                 break
                                     end=time.time()
+                                case 'delete':
+                                    new=[]
+                                    
+                                    for val in random_list:
+                                        new.append(val)
+                                    random.shuffle(new)
+
+                                    start=time.time()
+                                    for val_to_delete in random_list:
+                                        i=new.index(val_to_delete)
+                                        new.pop(i)
+                
+                                    end=time.time()
+
                     samples.append(end-start)
 
                 if operation in LL[DS].keys():
