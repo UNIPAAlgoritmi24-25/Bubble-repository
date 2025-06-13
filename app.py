@@ -172,8 +172,8 @@ def main():
         fig, ax = plt.subplots(figsize=(8, 5))
 
         for DS in Performance.keys():
-            ax.plot(input_sizes,Performance[DS][operation], marker='o',label=f'{DS} {operation}')
-        
+            ax.plot(input_sizes,Performance[DS][operation], marker='o',label=f'{DS}')
+        ax.set_title(operation)
         ax.set_xlabel("Input size")
         ax.set_ylabel("Avg time (s)")
         ax.legend()
