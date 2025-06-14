@@ -9,8 +9,10 @@ import random
 import time
 import HTLL
 import HTOA
+import red_black_tree
+
 def Ds_benchmark(input_sizes):
-    LL={'LL': {}, 'BST': {}, 'Arr': {}}
+    LL={'LL': {}, 'BST': {}, 'Arr': {},'RBT': {}}
     operations=['insert','search','delete']
 
     for input in input_sizes:
@@ -81,6 +83,7 @@ def Ds_benchmark(input_sizes):
                                     for val in random_list:
                                         bst.delete(val)
                                     end=time.time()
+                                    start=time.time()
 
 
                               
@@ -118,6 +121,22 @@ def Ds_benchmark(input_sizes):
                                         new.pop(i)
                 
                                     end=time.time()
+                        case 'RBT':
+                              match operation:
+                                case 'insert':
+                                    rbt=red_black_tree.RedBlackTree()
+                                    start=time.time()
+                                    for val in random_list:
+                                        rbt.insert(val)
+                                    end=time.time()
+                                case 'search':
+                                    rbt=red_black_tree.RedBlackTree()
+
+                                    start=time.time()
+                                    for val_to_search in random_list:
+                                        rbt.search(val_to_search)
+                                        
+                                    end=time.time()
 
                     samples.append(end-start)
 
@@ -130,7 +149,8 @@ def Ds_benchmark(input_sizes):
     
 def hashtable_benchmark(size):
 
-    dizionario={'HTuniversale': [], 'HTdoppiohash': [], 'HTaperto':[]}
+    dizionario_u={'HTuniversale': [], 'HTdoppiohash': [], 'HTaperto':[]}
+    dizionario_s={'HTuniversale': [], 'HTdoppiohash': [], 'HTaperto':[]}
     for s in size:
         hash_tb_universale=HTLL.HashTableLl(100)
         hash_tb_aperto_d=HTOA.HashTableDoubleHashing(s*2)
@@ -152,19 +172,45 @@ def hashtable_benchmark(size):
         for i in never_seen:
             hash_tb_universale.search(i)
         end=time.time()
-        dizionario['HTuniversale'].append(end-start)
+        dizionario_u['HTuniversale'].append(end-start)
+
+        
+        start=time.time()
+        for i in elements:
+            hash_tb_universale.search(i)
+        end=time.time()
+        dizionario_s['HTuniversale'].append(end-start)
+
+
         start=time.time()
         for i in never_seen:
             hash_tb_aperto_d.search(i)
         end=time.time()
-        dizionario['HTdoppiohash'].append(end-start)
+        dizionario_u['HTdoppiohash'].append(end-start)
+        
+        
+        start=time.time()
+        for i in elements:
+            hash_tb_aperto_d.search(i)
+        end=time.time()
+        dizionario_s['HTdoppiohash'].append(end-start)
+
+
         start=time.time()
         for i in never_seen:
             hash_tb_aperto_l.search(i)
         end=time.time()
-        dizionario['HTaperto'].append(end-start)
+        dizionario_u['HTaperto'].append(end-start)
 
-    return dizionario
+        start=time.time()
+        for i in elements:
+            hash_tb_aperto_l.search(i)
+        end=time.time()
+        dizionario_s['HTaperto'].append(end-start)
+
+
+
+    return (dizionario_u,dizionario_s)
         
 
 
@@ -214,25 +260,42 @@ def main():
         fig, ax = plt.subplots(figsize=(8, 5))
 
         for DS in Performance.keys():
-            ax.plot(input_sizes,Performance[DS][operation], marker='o',label=f'{DS}')
+            if DS == 'RBT' and operation=='delete':
+                pass
+            else:
+                ax.plot(input_sizes,Performance[DS][operation], marker='o',label=f'{DS}')
         ax.set_title(operation)
         ax.set_xlabel("Input size")
         ax.set_ylabel("Avg time (s)")
         ax.legend()
         st.pyplot(fig)
     
-    input_size=[10,100,1000,2000]
-    ht_performance=hashtable_benchmark(input_sizes)
-    print(ht_performance)
+    input_size=[10,100,1000,2000,4000]
+    ht_performance_unsuccesfull, ht_performance_succesfull=hashtable_benchmark(input_size)
+    
+
+    st.subheader('Hash table benchmarks')
+
     fig, ax=plt.subplots(figsize=(8,5))
-    for ht in ht_performance.keys():
-        ax.plot(input_size,ht_performance[ht], marker='o', label=ht)
+    for ht in ht_performance_unsuccesfull.keys():
+        ax.plot(input_size,ht_performance_unsuccesfull[ht], marker='o', label=ht)
 
     ax.set_title('Unsuccesful search')
     ax.set_xlabel("Input size")
     ax.set_ylabel("Avg time (s)")
     ax.legend()
     st.pyplot(fig)
+
+    fig, ax=plt.subplots(figsize=(8,5))
+    for ht in ht_performance_succesfull.keys():
+        ax.plot(input_size,ht_performance_succesfull[ht], marker='o', label=ht)
+        
+    ax.set_title('succesful search')
+    ax.set_xlabel("Input size")
+    ax.set_ylabel("Avg time (s)")
+    ax.legend()
+    st.pyplot(fig)
+
 
 
 
