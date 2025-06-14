@@ -220,8 +220,20 @@ def main():
         ax.set_ylabel("Avg time (s)")
         ax.legend()
         st.pyplot(fig)
-    ht_performance=hashtable_benchmark([10,100,1000,2000])
-    print(ht_performance)
+    
+    input_size=[10,100,1000,2000]
+    ht_performance=hashtable_benchmark(input_sizes)
+    fig, ax=plt.subplot(figsize=(8,5))
+    for ht in ht.keys():
+        ax.plot(input_size,ht_performance[ht], marker='o', label=ht)
+
+    ax.set_title('Unsuccesful search')
+    ax.set_xlabel("Input size")
+    ax.set_ylabel("Avg time (s)")
+    ax.legend()
+    st.pyplot(fig)
+
+
 
 
 if __name__ == "__main__":
