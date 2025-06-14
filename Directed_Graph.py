@@ -254,7 +254,36 @@ def djkstra(G,s):
             #print(u.value, adj_head.value)
            
             adj_head=adj_head.next
-     
+
+
+def carica_da_file(nome_file):
+    
+    V_G=[]
+    E_G=[]
+    # Lista per memorizzare gli archi del grafo
+    edges = []
+
+    with open(nome_file, 'r') as file:
+        for riga in file:
+            riga_pulita = riga.strip()
+            
+            if riga_pulita.startswith('(') and riga_pulita.endswith(')'):
+                
+                contenuto_parentesi = riga_pulita[1:-1]
+                
+                nodi = contenuto_parentesi.split(',')
+                nodo1 = int(nodi[0].strip())
+                nodo2 = int(nodi[1].strip())
+                E_G.append((nodo1, nodo2))
+                if nodo1 not in V_G:
+                    V_G.append(nodo1)
+                if nodo2 not in V_G:
+                    V_G.append(nodo2)
+    D_g = Directed_Graph_Weighted(V_G,E_G)
+    D_g.adj_list_representation()
+    return D_g
+
+  
 
 V_G = [1,2,3,4,5,6,12]
 E_G = [(1,2,3),(1,3,2),(2,3,5),(3,4,6), (5,6,7)]

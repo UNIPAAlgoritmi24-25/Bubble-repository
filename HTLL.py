@@ -150,3 +150,19 @@ class HashTableLl:
         for i, linked_list in enumerate(self.table):
             result += str(i) + ":"+ str(linked_list)+ "\n"
         return result
+    
+
+def carica_da_file(nome_file):
+    
+    A=LinkedList()
+    with open(nome_file, 'r') as file:
+        contenuto = file.read()
+        valori = contenuto.split(',')
+        
+        print("Valori caricati dal file:")
+        
+        # Itera su ogni valore nella lista
+        for valore in valori:
+            A.insert_at_head(valore)
+    return A
+            
