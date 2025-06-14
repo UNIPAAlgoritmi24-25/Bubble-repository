@@ -8,6 +8,7 @@ from io import StringIO
 import random
 import time
 import HTLL
+import HTOA
 def Ds_benchmark(input_sizes):
     LL={'LL': {}, 'BST': {}, 'Arr': {}}
     operations=['insert','search','delete']
@@ -126,7 +127,48 @@ def Ds_benchmark(input_sizes):
                 else:    
                     LL[DS][operation]=[sum(samples)/len(samples)]
     return LL
-            
+    
+def hashtable_benchmark(size):
+
+    dizionario={'HTuniversale': [], 'HTdoppiohash': [], 'HTaperto':[]}
+    for s in size:
+        hash_tb_universale=HTLL.HashTableLl(100)
+        hash_tb_aperto_d=HTOA.HashTableDoubleHashing(s*2)
+        hash_tb_aperto_l=HTOA.HashTableLinearProbing(s*2)
+        elements=[random.randint(1,s) for x in range(s)]
+        for e in elements:
+            hash_tb_universale.insert(e)
+            hash_tb_aperto_d.insert(e)
+            hash_tb_aperto_l.insert(e)
+        never_seen=[]
+        while len(never_seen)<s:
+            n=random.randint(1,2000)
+            if n in elements:
+                pass
+            else:
+                never_seen.append(n)
+
+        start=time.time()
+        for i in never_seen:
+            hash_tb_universale.search(i)
+        end=time.time()
+        dizionario['HTuniversale'].append(end-start)
+        start=time.time()
+        for i in never_seen:
+            hash_tb_aperto_d.search(i)
+        end=time.time()
+        dizionario['HTdoppiohash'].append(end-start)
+        start=time.time()
+        for i in never_seen:
+            hash_tb_aperto_l.search(i)
+        end=time.time()
+        dizionario['HTaperto'].append(end-start)
+
+    return dizionario
+        
+
+
+
 def main():
 
     t_1 = "Comparing sorting algorithms performances"
@@ -178,8 +220,8 @@ def main():
         ax.set_ylabel("Avg time (s)")
         ax.legend()
         st.pyplot(fig)
-            
-
+    ht_performance=hashtable_benchmark([10,100,1000,2000])
+    print(ht_performance)
 
 
 if __name__ == "__main__":
