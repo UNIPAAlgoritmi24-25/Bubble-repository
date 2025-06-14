@@ -223,8 +223,9 @@ def main():
     
     input_size=[10,100,1000,2000]
     ht_performance=hashtable_benchmark(input_sizes)
-    fig, ax=plt.subplot(figsize=(8,5))
-    for ht in ht.keys():
+    print(ht_performance)
+    fig, ax=plt.subplots(figsize=(8,5))
+    for ht in ht_performance.keys():
         ax.plot(input_size,ht_performance[ht], marker='o', label=ht)
 
     ax.set_title('Unsuccesful search')
