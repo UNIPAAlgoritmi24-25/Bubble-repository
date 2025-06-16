@@ -11,6 +11,7 @@ import HTLL
 import HTOA
 import red_black_tree
 
+
 def Ds_benchmark(input_sizes):
     LL={'LL': {}, 'BST': {}, 'Arr': {},'RBT': {}}
     operations=['insert','search','delete']
@@ -27,17 +28,14 @@ def Ds_benchmark(input_sizes):
                             match operation:
                                 case 'insert':
                                     start=time.time()
-
                                     L=Linked_list.LinkedList()
                                     for val in random_list:
                                         L.insert_at_head(val)
-                        
                                     end=time.time()
                                 case 'search':
                                     L=Linked_list.LinkedList()
                                     for val in random_list:
                                         L.insert_at_head(val)
-
                                     start=time.time()
                                     random.shuffle(random_list)
                                     for val in random_list:
@@ -53,8 +51,6 @@ def Ds_benchmark(input_sizes):
                                         L.delete(val)
                                     end=time.time()
 
-                                    
-
                         case 'BST':
                             match operation:
                                 case 'insert':
@@ -67,7 +63,6 @@ def Ds_benchmark(input_sizes):
                                     bst=binarysearchtree.BinarySearchTree()
                                     for val in random_list:
                                         bst.insert(val)
-                                    
                                     start=time.time()
                                     random.shuffle(random_list)
                                     for val in random_list:
@@ -77,16 +72,12 @@ def Ds_benchmark(input_sizes):
                                     bst=binarysearchtree.BinarySearchTree()
                                     for val in random_list:
                                         bst.insert(val)
-                                    
                                     start=time.time()
                                     random.shuffle(random_list)
                                     for val in random_list:
                                         bst.delete(val)
                                     end=time.time()
-                                    start=time.time()
 
-
-                              
                         case 'Arr':
                             match operation:
                                 case 'insert':
@@ -97,11 +88,9 @@ def Ds_benchmark(input_sizes):
                                     end=time.time()
                                 case 'search':
                                     new=[]
-                                    
                                     for val in random_list:
                                         new.append(val)
                                     random.shuffle(new)
-
                                     start=time.time()
                                     for val_to_search in random_list:
                                         for val in new:
@@ -110,16 +99,13 @@ def Ds_benchmark(input_sizes):
                                     end=time.time()
                                 case 'delete':
                                     new=[]
-                                    
                                     for val in random_list:
                                         new.append(val)
                                     random.shuffle(new)
-
                                     start=time.time()
                                     for val_to_delete in random_list:
                                         i=new.index(val_to_delete)
                                         new.pop(i)
-                
                                     end=time.time()
                         case 'RBT':
                               match operation:
@@ -131,24 +117,22 @@ def Ds_benchmark(input_sizes):
                                     end=time.time()
                                 case 'search':
                                     rbt=red_black_tree.RedBlackTree()
-
+                                    for val in random_list:
+                                        rbt.insert(val)
                                     start=time.time()
                                     for val_to_search in random_list:
                                         rbt.search(val_to_search)
-                                        
                                     end=time.time()
 
                     samples.append(end-start)
 
                 if operation in LL[DS].keys():
                     LL[DS][operation].append(sum(samples)/len(samples))
-                        
                 else:    
                     LL[DS][operation]=[sum(samples)/len(samples)]
     return LL
     
 def hashtable_benchmark(size):
-
     dizionario_u={'HTuniversale': [], 'HTdoppiohash': [], 'HTaperto':[]}
     dizionario_s={'HTuniversale': [], 'HTdoppiohash': [], 'HTaperto':[]}
     for s in size:
@@ -174,13 +158,11 @@ def hashtable_benchmark(size):
         end=time.time()
         dizionario_u['HTuniversale'].append(end-start)
 
-        
         start=time.time()
         for i in elements:
             hash_tb_universale.search(i)
         end=time.time()
         dizionario_s['HTuniversale'].append(end-start)
-
 
         start=time.time()
         for i in never_seen:
@@ -188,13 +170,11 @@ def hashtable_benchmark(size):
         end=time.time()
         dizionario_u['HTdoppiohash'].append(end-start)
         
-        
         start=time.time()
         for i in elements:
             hash_tb_aperto_d.search(i)
         end=time.time()
         dizionario_s['HTdoppiohash'].append(end-start)
-
 
         start=time.time()
         for i in never_seen:
@@ -208,96 +188,325 @@ def hashtable_benchmark(size):
         end=time.time()
         dizionario_s['HTaperto'].append(end-start)
 
-
-
     return (dizionario_u,dizionario_s)
-        
 
-
+# =================== INTERFACE  ===================
 
 def main():
+    st.sidebar.title("📋 Main Menu")
+    
+    section = st.sidebar.selectbox(
+        "Select Section:",
+        [
+            "Sorting Algorithms", 
+            "Linked Lists",
+            "Binary Search Trees (BST)",
+            "Data Structures Performance Test",
+            "Hash Tables",
+            "Hash Tables Performance Test",
+            "Red-Black Tree",
+            "Graphs"
+        ]
+    )
 
-    t_1 = "Comparing sorting algorithms performances"
-    st.title(t_1)
+    if section == "Sorting Algorithms":
+        show_sorting_section()
+    elif section == "Linked Lists":
+        pass
+    elif section == "Binary Search Trees (BST)":
+        pass
+    elif section == "Data Structures Performance Test":
+        show_datastructures_benchmark()
+    elif section == "Hash Tables":
+        pass
+    elif section == "Hash Tables Performance Test":
+        show_hashtables_benchmark()
+    elif section == "Red-Black Tree":
+        pass
+    elif section == "Graphs":
+        pass
 
-    input_sizes = (10, 100, 1000)
+def show_sorting_section():
+    st.header("🔄 Sorting Algorithms")
+    
+    st.subheader("Apply a Sorting Algorithm")
+    
+    col1, col2 = st.columns([1, 2])
+        
+    with col1:
+            # scelta algoritmo
+            algorithm = st.selectbox(
+                "Select algorithm:",
+                ["MergeSort", "QuickSort", "InsertionSort","BinaryInsertionSort" , "BubbleSort", "ShortBubbleSort", "CountingSort"]
+            )
+            
+            # metodo di input
+            input_method = st.radio(
+                "Input method:",
+                ["📝 Manual input", "📁 File upload", "🎲 Random generation"]
+            )
+        
+    with col2:
+            if input_method == "📝 Manual input":
+                input_text = st.text_area(
+                    "Enter numbers separated by comma:",
+                    value="64, 340, 25, 12, 22, 11, 90",
+                    height=100
+                )
+                if st.button("Sort", type="primary"):
+                    try:
+                        values = [int(x.strip()) for x in input_text.split(',')]
+                        start_time = time.time()
+                        sorted_values = apply_sorting_algorithm(algorithm, values.copy())
+                        exec_time = time.time() - start_time
+                        
+                        col1, col2 = st.columns(2)
+                        col1.write("**Original array:**")
+                        col1.code(str(values))
+                        col2.write("**Sorted array:**")
+                        col2.code(str(sorted_values))
+                        
+                        st.info(f"⏱️ **Execution time**: {exec_time:.6f} seconds")
+                    except ValueError:
+                        st.error("Enter valid numbers separated by comma")
+            
+            elif input_method == "📁 File upload":
+                '''da implementare'''
+
+            elif input_method == "🎲 Random generation":
+                size = st.number_input("Array size:", min_value=1, value=20, step=1, format="%d")
+                
+                if st.button("Generate and Sort"):
+                    values = [random.randint(1, 100) for _ in range(size)]
+                    start_time = time.time()
+                    sorted_values = apply_sorting_algorithm(algorithm, values.copy())
+                    exec_time = time.time() - start_time
+
+                    col1, col2 = st.columns(2)
+                    col1.write("**Original array:**")
+                    col1.code(str(values))
+                    col2.write("**Sorted array:**")
+                    col2.code(str(sorted_values))
+
+                    st.info(f"⏱️ **Execution time**: {exec_time:.6f} seconds")
+    
+    st.markdown("---")
+    
+    # =============== PERFORMANCE TESTING ===============
+    st.subheader("Performance Testing")
+        
+    input_sizes = [10, 100, 1000, 10000]
     n_of_runs = 10
+    
+    if 'performance_cancelled' not in st.session_state:
+        st.session_state.performance_cancelled = False
+    
+    # Cache
+    cache_key = f"sorting_performance_{input_sizes}_{n_of_runs}"
+    
+    if cache_key not in st.session_state and not st.session_state.performance_cancelled:
 
-    # Performance calculation
-    with st.spinner("Calculating..."):
-        results = sorting.performance_test(input_sizes, n_of_runs)
+        loading_container = st.container()
+        
+        with loading_container:
+            col1, col2 = st.columns([3, 1])
+            
+            with col1:
+                st.info("⏳ Loading performance test... This may take a few minutes.")
+            
+            with col2:
+                if st.button("❌ Cancel", type="secondary"):
+                    st.session_state.performance_cancelled = True
+                    st.rerun()
+        
+        if not st.session_state.performance_cancelled:
+            try:
+                with st.spinner("Running performance test..."):
+                    results = sorting.performance_test(input_sizes, n_of_runs)
+                
+                # Salva in cache
+                st.session_state[cache_key] = results
+                
+                loading_container.empty()
+                
+                st.success("Performance test completed!")
+                
+            except Exception as e:
+                loading_container.empty()
+                st.error(f"Error during test: {str(e)}")
+                return
+    
+    elif st.session_state.performance_cancelled:
+        st.warning("⚠️ Performance test was cancelled")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("🔄 Restart Test", type="primary"):
+                st.session_state.performance_cancelled = False
+                if cache_key in st.session_state:
+                    del st.session_state[cache_key]
+                st.rerun()
+        
+        with col2:
+            if cache_key in st.session_state:
+                if st.button("📊 Show Cached Results"):
+                    st.session_state.performance_cancelled = False
+                    st.rerun()
+        return
+    
+    # Mostra risultati (da cache se sono salvati)
+    if cache_key in st.session_state:
+        results = st.session_state[cache_key]
+        
+        st.subheader("Table of results (avg time in seconds)")
+        st.write("Sizes tested:", input_sizes)
+        st.write("Average calculated on:", n_of_runs, "runs")
 
-    st.subheader("Table of results (avg time in seconds)")
-    st.write("Sizes tested:", input_sizes)
-    st.write("Average calculated on:", n_of_runs, "runs")
-
-    # Create a df to show the results
-    df = pd.DataFrame(results, index=input_sizes)
-    df.index.name = "Input size"
-    st.dataframe(df)
-
-    # Plot the results
-    fig, ax = plt.subplots(figsize=(8, 5))
-
-    for algo_name, times in results.items():
-        ax.plot(input_sizes, times, marker="o", label=algo_name)
-
-    ax.set_xlabel("Input size")
-    ax.set_ylabel("Avg time (s)")
-    ax.set_title(t_1)
-    ax.legend()
-    ax.grid(True)
-
-    st.pyplot(fig)
-   
-    st.subheader("Datastructures benchmark")
-
-    input_sizes=(10,100,1000,2000,3000,4000)
-    Performance=Ds_benchmark(input_sizes)
-
-    operations=['insert','search','delete']
-    for operation in operations:
+        # Create a df to show the results
+        df = pd.DataFrame(results, index=input_sizes)
+        df.index.name = "Input size"
+        st.dataframe(df)
+                    
+        # Plot the results
         fig, ax = plt.subplots(figsize=(8, 5))
+                    
+        for algo_name, times in results.items():
+           ax.plot(input_sizes, times, marker="o", label=algo_name)
 
-        for DS in Performance.keys():
-            if DS == 'RBT' and operation=='delete':
-                pass
-            else:
-                ax.plot(input_sizes,Performance[DS][operation], marker='o',label=f'{DS}')
-        ax.set_title(operation)
         ax.set_xlabel("Input size")
         ax.set_ylabel("Avg time (s)")
+        ax.set_title("Sorting Algorithms Performance Comparison", fontsize=14, fontweight='bold')
         ax.legend()
+        ax.grid(True)
+                    
         st.pyplot(fig)
     
-    input_size=[10,100,1000,2000,4000]
-    ht_performance_unsuccesfull, ht_performance_succesfull=hashtable_benchmark(input_size)
+        if st.button("🔄 Run New Test"):
+            if cache_key in st.session_state:
+                del st.session_state[cache_key]
+            st.session_state.performance_cancelled = False
+            st.rerun()
+
+def show_datastructures_benchmark():
+    st.header("📊 Data Structures Performance Test")
     
+    st.write("Performance comparison between **Arrays**, **Linked Lists**, **BST** and **Red-Black Tree**")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        input_sizes = st.multiselect(
+            "Sizes to test:",
+            [10, 100, 1000, 2000, 3000, 4000, 5000, 10000],
+            default=[10, 100, 1000, 10000]
+        )
+    with col2:
+        st.info("📝 Tests performed: **Insert**, **Search**, **Delete**\n\n⏱️ **10 runs** for each operation")
+    
+    if st.button("🚀 Run Complete Benchmark", type="primary"):
+        if not input_sizes:
+            st.error("Select at least one size!")
+        else:
+            with st.spinner("⏳ Running benchmark... This may take several minutes."):
+                Performance = Ds_benchmark(tuple(input_sizes))
+                
+                operations = ['insert', 'search', 'delete']
+                for operation in operations:
+                    st.subheader(f"📈 Performance: {operation.title()}")
+                    
+                    fig, ax = plt.subplots(figsize=(8, 5))
 
-    st.subheader('Hash table benchmarks')
+                    for DS in Performance.keys():
+                        if DS == 'RBT' and operation == 'delete':
+                            pass
+                        else:
+                            ax.plot(input_sizes, Performance[DS][operation], 
+                                   marker='o', label=f'{DS}')
+                    
+                    ax.set_title(f'Performance {operation.title()}', fontsize=14, fontweight='bold')
+                    ax.set_xlabel("Input size")
+                    ax.set_ylabel("Average time (s)")
+                    ax.legend()
+                    ax.grid(True, alpha=0.3)
+                    st.pyplot(fig)
 
-    fig, ax=plt.subplots(figsize=(8,5))
-    for ht in ht_performance_unsuccesfull.keys():
-        ax.plot(input_size,ht_performance_unsuccesfull[ht], marker='o', label=ht)
-
-    ax.set_title('Unsuccesful search')
-    ax.set_xlabel("Input size")
-    ax.set_ylabel("Avg time (s)")
-    ax.legend()
-    st.pyplot(fig)
-
-    fig, ax=plt.subplots(figsize=(8,5))
-    for ht in ht_performance_succesfull.keys():
-        ax.plot(input_size,ht_performance_succesfull[ht], marker='o', label=ht)
+def show_hashtables_benchmark():
+    st.header("📈 Hash Tables Performance Test")
+    
+    st.write("Performance comparison between the **3 implementations** of hash table")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        input_size = st.multiselect(
+            "Sizes to test:",
+            [10, 100, 1000, 2000, 4000, 5000, 10000],
+            default=[10, 100, 1000, 10000]
+        )
+    with col2:
+        st.info("""
+        📝 **Tests performed:**
+        - **Unsuccessful** searches (non-existing elements)
+        - **Successful** searches (existing elements)
         
-    ax.set_title('succesful search')
-    ax.set_xlabel("Input size")
-    ax.set_ylabel("Avg time (s)")
-    ax.legend()
-    st.pyplot(fig)
+        🔧 **Implementations tested:**
+        - Universal Hash
+        - Double Hashing (open addressing)  
+        - Linear Probing (open addressing)
+        """)
+    
+    if st.button("🚀 Run Hash Tables Benchmark", type="primary"):
+        if not input_size:
+            st.error("Select at least one size!")
+        else:
+            with st.spinner("⏳ Running hash tables performance test..."):
+                ht_performance_unsuccessful, ht_performance_successful = hashtable_benchmark(input_size)
+            
+                st.subheader('🔍 Unsuccessful Searches')
+                fig, ax = plt.subplots(figsize=(8, 5))
 
+                for ht in ht_performance_unsuccessful.keys():
+                    ax.plot(input_size, ht_performance_unsuccessful[ht], 
+                           marker='o', label=ht)
+                
+                ax.set_title('Unsuccessful Searches', fontsize=14, fontweight='bold')
+                ax.set_xlabel("Input Size", fontsize=12)
+                ax.set_ylabel("Average Time (s)", fontsize=12)
+                ax.legend(fontsize=10)
+                ax.grid(True, alpha=0.3)
+                st.pyplot(fig)
+                
+         
+                st.subheader('✅ Successful Searches')
+                fig, ax = plt.subplots(figsize=(12, 6))
+                
+                for ht in ht_performance_successful.keys():
+                    ax.plot(input_size, ht_performance_successful[ht], 
+                           marker='o', label=ht)
+                
+                ax.set_title('Successful Searches', fontsize=14, fontweight='bold')
+                ax.set_xlabel("Input Size", fontsize=12)
+                ax.set_ylabel("Average Time (s)", fontsize=12)
+                ax.legend(fontsize=10)
+                ax.grid(True, alpha=0.3)
+                st.pyplot(fig)
 
-
+def apply_sorting_algorithm(algorithm, values):
+    """Apply the selected sorting algorithm"""
+    if algorithm == "MergeSort":
+        return sorting.merge_sort(values)
+    elif algorithm == "QuickSort":
+        sorting.quick_sort(values, 0, len(values) - 1)
+        return values
+    elif algorithm == "InsertionSort":
+        return sorting.insertion_sort(values)
+    elif algorithm == "BinaryInsertionSort":
+        return sorting.BinaryInsertionSort(values)
+    elif algorithm == "BubbleSort":
+        return sorting.BubbleSort(values)
+    elif algorithm == "ShortBubbleSort":
+        return sorting.ShortBubbleSort(values)
+    elif algorithm == "CountingSort":
+        return sorting.CountingSort(values)
+    return values
 
 
 if __name__ == "__main__":
