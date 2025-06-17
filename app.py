@@ -214,7 +214,7 @@ def main():
     elif section == "Linked Lists":
         show_linked_list_section()
     elif section == "Binary Search Trees (BST)":
-        pass
+        show_bst_section()
     elif section == "Data Structures Performance Test":
         show_datastructures_benchmark()
     elif section == "Hash Tables":
@@ -279,7 +279,7 @@ def show_sorting_section():
                 size = st.number_input("Array size:", min_value=1, value=20, step=1, format="%d")
                 
                 if st.button("Generate and Sort"):
-                    values = [random.randint(1, 100) for _ in range(size)]
+                    values = [random.randint(1, 1000) for _ in range(size)]
                     start_time = time.time()
                     sorted_values = apply_sorting_algorithm(algorithm, values.copy())
                     exec_time = time.time() - start_time
@@ -425,7 +425,8 @@ def show_linked_list_section():
         if st.button("Insert at head"):
             st.session_state.linked_list.insert_at_head(new_value)
             st.success(f"Value {new_value} inserted!")
-        
+            st.rerun()
+
     with col2:
         st.write("**Search:**")
         search_value = st.number_input("Value to search:", value=0, key="search")
@@ -473,6 +474,61 @@ def show_linked_list_section():
                 st.write(f"Successor: {succ.value}")
             else:
                 st.write("No successor")
+
+def show_bst_section():
+    st.header("🌳 Binary Search Trees (BST)")
+    
+    if 'bst' not in st.session_state:
+        st.session_state.bst = binarysearchtree.BinarySearchTree()
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.write("**Insertion:**")
+        insert_value = st.number_input("Value:", value=0, key="bst_insert")
+        if st.button("➕ Insert"):
+            st.session_state.bst.insert(insert_value)
+            st.success(f"✅ {insert_value} inserted!")
+    
+    with col2:
+        st.write("**Search:**")
+        search_value = st.number_input("Value:", value=0, key="bst_search")
+        if st.button("🔍 Search"):
+            result = st.session_state.bst.search(search_value)
+            if result:
+                st.success(f"✅ {search_value} found!")
+            else:
+                st.warning(f"❌ {search_value} not found.")
+    
+    with col3:
+        st.write("**Deletion:**")
+        delete_value = st.number_input("Value:", value=0, key="bst_delete")
+        if st.button("🗑️ Delete"):
+            st.session_state.bst.delete(delete_value)
+            st.success(f"✅ {delete_value} deleted!")
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        if st.button("📊 Minimum"):
+            if st.session_state.bst.root:
+                min_node = st.session_state.bst.minimum()
+                st.metric("Minimum", min_node.val)
+    
+    with col2:
+        if st.button("📈 Maximum"):
+            if st.session_state.bst.root:
+                max_node = st.session_state.bst.maximum()
+                st.metric("Maximum", max_node.val)
+    
+    with col3:
+        if st.button("🌳 Show Structure"):
+            if st.session_state.bst.root:
+                st.text("BST Structure:")
+                # Implement visualization
+                st.info("Visualization to be implemented")
+            else:
+                st.write("Empty BST")
 
 def show_datastructures_benchmark():
     st.header("📊 Data Structures Performance Test")

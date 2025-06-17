@@ -322,7 +322,3 @@ if __name__ == "__main__":
         )
     )
 
-    test = [10,9,4,2,0,7,25]
-    quick_sort(test, 0, len(test)-1)
-    print(test)
-
