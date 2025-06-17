@@ -218,7 +218,7 @@ def main():
     elif section == "Data Structures Performance Test":
         show_datastructures_benchmark()
     elif section == "Hash Tables":
-        pass
+        show_hashtables_section()
     elif section == "Hash Tables Performance Test":
         show_hashtables_benchmark()
     elif section == "Red-Black Tree":
@@ -571,6 +571,91 @@ def show_datastructures_benchmark():
                     ax.legend()
                     ax.grid(True, alpha=0.3)
                     st.pyplot(fig)
+
+def show_hashtables_section():
+    st.header("🗂️ Hash Tables")
+    
+    tab1, tab2, tab3 = st.tabs([
+        "🔗 Universal Hashing", 
+        "🔀 Double Hashing", 
+        "➡️ Linear Probing"
+    ])
+    
+    with tab1:
+        st.subheader("Universal Hashing")
+        
+        if 'ht_universal' not in st.session_state:
+            st.session_state.ht_universal = HTLL.HashTableLl(100)
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            insert_val = st.number_input("Insert:", value=0, key="ht_univ_insert")
+            if st.button("➕ Insert", key="univ_insert"):
+                st.session_state.ht_universal.insert(insert_val)
+                st.success(f"✅ {insert_val} inserted!")
+        
+        with col2:
+            search_val = st.number_input("Search:", value=0, key="ht_univ_search")
+            if st.button("🔍 Search", key="univ_search"):
+                result = st.session_state.ht_universal.search(search_val)
+                if result:
+                    st.success("✅ Found!")
+                else:
+                    st.warning("❌ Not found.")
+        
+        with col3:
+            delete_val = st.number_input("Delete:", value=0, key="ht_univ_delete")
+            if st.button("🗑️ Delete", key="univ_delete"):
+                st.session_state.ht_universal.delete(delete_val)
+                st.success(f"✅ {delete_val} deleted!")
+    
+    with tab2:
+        st.subheader("Hash Table - Double Hashing")
+        
+        if 'ht_double' not in st.session_state:
+            st.session_state.ht_double = HTOA.HashTableDoubleHashing(200)
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            insert_val = st.number_input("Insert:", value=0, key="ht_double_insert")
+            if st.button("➕ Insert", key="double_insert"):
+                st.session_state.ht_double.insert(insert_val)
+                st.success(f"✅ {insert_val} inserted!")
+        
+        with col2:
+            search_val = st.number_input("Search:", value=0, key="ht_double_search")
+            if st.button("🔍 Search", key="double_search"):
+                result = st.session_state.ht_double.search(search_val)
+                if result is not None:
+                    st.success(f"✅ Found at position {result}!")
+                else:
+                    st.warning("❌ Not found.")
+    
+    with tab3:
+        st.subheader("Hash Table - Linear Probing")
+        
+        if 'ht_linear' not in st.session_state:
+            st.session_state.ht_linear = HTOA.HashTableLinearProbing(200)
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            insert_val = st.number_input("Insert:", value=0, key="ht_linear_insert")
+            if st.button("➕ Insert", key="linear_insert"):
+                st.session_state.ht_linear.insert(insert_val)
+                st.success(f"✅ {insert_val} inserted!")
+        
+        with col2:
+            search_val = st.number_input("Search:", value=0, key="ht_linear_search")
+            if st.button("🔍 Search", key="linear_search"):
+                result = st.session_state.ht_linear.search(search_val)
+                if result is not None:
+                    st.success(f"✅ Found at position {result}!")
+                else:
+                    st.warning("❌ Not found.")
+
 
 def show_hashtables_benchmark():
     st.header("📈 Hash Tables Performance Test")
