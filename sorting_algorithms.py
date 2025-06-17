@@ -86,8 +86,8 @@ def partition(values, start, end):
     partion helper function that swap values and return the i'th
     index from where to start and where to end the next sublists division.
     """
-
-    pivot = values[randint(start, end)]
+    
+    pivot = values[end]
     i = start - 1
 
     for j in range(start, end):
@@ -238,7 +238,8 @@ def CountingSort(array):
 
 
 def performance_test(
-    input_sizes: tuple[int], n_of_runs: int
+    input_sizes: tuple[int], n_of_runs: int,
+    cancel_check_callback=None 
 ) -> dict[str, list[float]]:
     """This functions allows to execute a performance test on the sorting
     algos of the module.
@@ -284,9 +285,14 @@ def performance_test(
 
     for values in random_valuess:
         for algorithm, name in zip(functions, performances.keys()):
+            if cancel_check_callback and cancel_check_callback():
+                return None
             time_total = 0
 
             for run in range(n_of_runs):
+                if cancel_check_callback and cancel_check_callback():
+                    return None
+                
                 # call the algo to sort the list and record the elapsed time
                 shuffle(values)
                 start_time = time.time()
@@ -315,3 +321,8 @@ if __name__ == "__main__":
             for algo, performances in performances.items()
         )
     )
+
+    test = [10,9,4,2,0,7,25]
+    quick_sort(test, 0, len(test)-1)
+    print(test)
+

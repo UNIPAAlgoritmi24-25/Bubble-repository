@@ -212,7 +212,7 @@ def main():
     if section == "Sorting Algorithms":
         show_sorting_section()
     elif section == "Linked Lists":
-        pass
+        show_linked_list_section()
     elif section == "Binary Search Trees (BST)":
         pass
     elif section == "Data Structures Performance Test":
@@ -229,6 +229,8 @@ def main():
 def show_sorting_section():
     st.header("🔄 Sorting Algorithms")
     
+    st.empty() 
+
     st.subheader("Apply a Sorting Algorithm")
     
     col1, col2 = st.columns([1, 2])
@@ -294,7 +296,7 @@ def show_sorting_section():
     
     # =============== PERFORMANCE TESTING ===============
     st.subheader("Performance Testing")
-        
+    
     input_sizes = [10, 100, 1000, 10000]
     n_of_runs = 10
     
@@ -302,10 +304,9 @@ def show_sorting_section():
         st.session_state.performance_cancelled = False
     
     # Cache
-    cache_key = f"sorting_performance_{input_sizes}_{n_of_runs}"
-    
+    cache_key = f"sorting_perf_{'_'.join(map(str, sorted(input_sizes)))}_{n_of_runs}"
+  
     if cache_key not in st.session_state and not st.session_state.performance_cancelled:
-
         loading_container = st.container()
         
         with loading_container:
@@ -322,14 +323,27 @@ def show_sorting_section():
         if not st.session_state.performance_cancelled:
             try:
                 with st.spinner("Running performance test..."):
-                    results = sorting.performance_test(input_sizes, n_of_runs)
-                
-                # Salva in cache
-                st.session_state[cache_key] = results
-                
-                loading_container.empty()
-                
-                st.success("Performance test completed!")
+                    def check_cancelled():
+                        return st.session_state.get('performance_cancelled', False)
+                    
+                    results = sorting.performance_test(
+                        tuple(input_sizes), 
+                        n_of_runs,
+                        cancel_check_callback=check_cancelled
+                    )
+
+                if results is None:
+                    st.session_state.performance_cancelled = True
+                    loading_container.empty()
+                    st.rerun()
+
+                else:
+                    # Salva in cache
+                    st.session_state[cache_key] = results
+                    
+                    loading_container.empty()
+                    st.success("Performance test completed!")
+                    st.rerun()
                 
             except Exception as e:
                 loading_container.empty()
@@ -349,10 +363,10 @@ def show_sorting_section():
         
         with col2:
             if cache_key in st.session_state:
-                if st.button("📊 Show Cached Results"):
+                if st.button("Show Cached Results"):
                     st.session_state.performance_cancelled = False
                     st.rerun()
-        return
+        st.stop()
     
     # Mostra risultati (da cache se sono salvati)
     if cache_key in st.session_state:
@@ -386,6 +400,79 @@ def show_sorting_section():
                 del st.session_state[cache_key]
             st.session_state.performance_cancelled = False
             st.rerun()
+
+def show_linked_list_section():
+    st.header("📝 Linked Lists")
+    
+    if 'linked_list' not in st.session_state:
+        st.session_state.linked_list = Linked_list.LinkedList()
+    
+
+    st.subheader("Linked List Operations")
+        
+        
+    st.write("**Current List:**")
+    if st.session_state.linked_list.head:
+        st.code(str(st.session_state.linked_list))
+    else:
+        st.write("Empty list")
+
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write("**Insertion:**")
+        new_value = st.number_input("Value to insert:", value=0)
+        if st.button("Insert at head"):
+            st.session_state.linked_list.insert_at_head(new_value)
+            st.success(f"Value {new_value} inserted!")
+        
+    with col2:
+        st.write("**Search:**")
+        search_value = st.number_input("Value to search:", value=0, key="search")
+        if st.button("Search"):
+            result = st.session_state.linked_list.search(search_value)
+            if result:
+                st.success(f"✅ Value {search_value} found!")
+            else:
+                st.warning(f"❌ Value {search_value} not found.")
+        
+        
+    st.subheader("Operations")
+    col1, col2 = st.columns(2)
+        
+    with col1:
+        if st.button("Minimum"):
+            min_val = st.session_state.linked_list.minimum()
+            if min_val is not None:
+                st.metric("Minimum", min_val)
+            else:
+                st.write("Empty list")
+        
+    with col2:
+        if st.button("Maximum"):
+            max_val = st.session_state.linked_list.maximum()
+            if max_val is not None:
+                st.metric("Maximum", max_val)
+            else:
+                st.write("Empty list")
+        
+    with col1:
+        pred_value = st.number_input("Predecessor of:", value=0, key="pred")
+        if st.button("Predecessor"):
+            pred = st.session_state.linked_list.predecessor(pred_value)
+            if pred is not None:
+                st.write(f"Predecessor: {pred}")
+            else:
+                st.write("No predecessor")
+        
+    with col2:
+        succ_value = st.number_input("Successor of:", value=0, key="succ")
+        if st.button("Successor"):
+            succ = st.session_state.linked_list.successor(succ_value)
+            if succ is not None:
+                st.write(f"Successor: {succ.value}")
+            else:
+                st.write("No successor")
 
 def show_datastructures_benchmark():
     st.header("📊 Data Structures Performance Test")
