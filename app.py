@@ -214,15 +214,15 @@ def main():
     elif section == "Linked Lists":
         show_linked_list_section()
     elif section == "Binary Search Trees (BST)":
-        pass
+        show_bst_section()
     elif section == "Data Structures Performance Test":
         show_datastructures_benchmark()
     elif section == "Hash Tables":
-        pass
+        show_hashtables_section()
     elif section == "Hash Tables Performance Test":
         show_hashtables_benchmark()
     elif section == "Red-Black Tree":
-        pass
+        show_red_black_tree_section()
     elif section == "Graphs":
         pass
 
@@ -279,7 +279,7 @@ def show_sorting_section():
                 size = st.number_input("Array size:", min_value=1, value=20, step=1, format="%d")
                 
                 if st.button("Generate and Sort"):
-                    values = [random.randint(1, 100) for _ in range(size)]
+                    values = [random.randint(1, 1000) for _ in range(size)]
                     start_time = time.time()
                     sorted_values = apply_sorting_algorithm(algorithm, values.copy())
                     exec_time = time.time() - start_time
@@ -425,7 +425,8 @@ def show_linked_list_section():
         if st.button("Insert at head"):
             st.session_state.linked_list.insert_at_head(new_value)
             st.success(f"Value {new_value} inserted!")
-        
+            st.rerun()
+
     with col2:
         st.write("**Search:**")
         search_value = st.number_input("Value to search:", value=0, key="search")
@@ -474,6 +475,61 @@ def show_linked_list_section():
             else:
                 st.write("No successor")
 
+def show_bst_section():
+    st.header("🌳 Binary Search Trees (BST)")
+    
+    if 'bst' not in st.session_state:
+        st.session_state.bst = binarysearchtree.BinarySearchTree()
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.write("**Insertion:**")
+        insert_value = st.number_input("Value:", value=0, key="bst_insert")
+        if st.button("➕ Insert"):
+            st.session_state.bst.insert(insert_value)
+            st.success(f"✅ {insert_value} inserted!")
+    
+    with col2:
+        st.write("**Search:**")
+        search_value = st.number_input("Value:", value=0, key="bst_search")
+        if st.button("🔍 Search"):
+            result = st.session_state.bst.search(search_value)
+            if result:
+                st.success(f"✅ {search_value} found!")
+            else:
+                st.warning(f"❌ {search_value} not found.")
+    
+    with col3:
+        st.write("**Deletion:**")
+        delete_value = st.number_input("Value:", value=0, key="bst_delete")
+        if st.button("🗑️ Delete"):
+            st.session_state.bst.delete(delete_value)
+            st.success(f"✅ {delete_value} deleted!")
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        if st.button("📊 Minimum"):
+            if st.session_state.bst.root:
+                min_node = st.session_state.bst.minimum()
+                st.metric("Minimum", min_node.val)
+    
+    with col2:
+        if st.button("📈 Maximum"):
+            if st.session_state.bst.root:
+                max_node = st.session_state.bst.maximum()
+                st.metric("Maximum", max_node.val)
+    
+    with col3:
+        if st.button("🌳 Show Structure"):
+            if st.session_state.bst.root:
+                st.text("BST Structure:")
+                # Implement visualization
+                st.info("Visualization to be implemented")
+            else:
+                st.write("Empty BST")
+
 def show_datastructures_benchmark():
     st.header("📊 Data Structures Performance Test")
     
@@ -515,6 +571,91 @@ def show_datastructures_benchmark():
                     ax.legend()
                     ax.grid(True, alpha=0.3)
                     st.pyplot(fig)
+
+def show_hashtables_section():
+    st.header("🗂️ Hash Tables")
+    
+    tab1, tab2, tab3 = st.tabs([
+        "🔗 Universal Hashing", 
+        "🔀 Double Hashing", 
+        "➡️ Linear Probing"
+    ])
+    
+    with tab1:
+        st.subheader("Universal Hashing")
+        
+        if 'ht_universal' not in st.session_state:
+            st.session_state.ht_universal = HTLL.HashTableLl(100)
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            insert_val = st.number_input("Insert:", value=0, key="ht_univ_insert")
+            if st.button("➕ Insert", key="univ_insert"):
+                st.session_state.ht_universal.insert(insert_val)
+                st.success(f"✅ {insert_val} inserted!")
+        
+        with col2:
+            search_val = st.number_input("Search:", value=0, key="ht_univ_search")
+            if st.button("🔍 Search", key="univ_search"):
+                result = st.session_state.ht_universal.search(search_val)
+                if result:
+                    st.success("✅ Found!")
+                else:
+                    st.warning("❌ Not found.")
+        
+        with col3:
+            delete_val = st.number_input("Delete:", value=0, key="ht_univ_delete")
+            if st.button("🗑️ Delete", key="univ_delete"):
+                st.session_state.ht_universal.delete(delete_val)
+                st.success(f"✅ {delete_val} deleted!")
+    
+    with tab2:
+        st.subheader("Hash Table - Double Hashing")
+        
+        if 'ht_double' not in st.session_state:
+            st.session_state.ht_double = HTOA.HashTableDoubleHashing(200)
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            insert_val = st.number_input("Insert:", value=0, key="ht_double_insert")
+            if st.button("➕ Insert", key="double_insert"):
+                st.session_state.ht_double.insert(insert_val)
+                st.success(f"✅ {insert_val} inserted!")
+        
+        with col2:
+            search_val = st.number_input("Search:", value=0, key="ht_double_search")
+            if st.button("🔍 Search", key="double_search"):
+                result = st.session_state.ht_double.search(search_val)
+                if result is not None:
+                    st.success(f"✅ Found at position {result}!")
+                else:
+                    st.warning("❌ Not found.")
+    
+    with tab3:
+        st.subheader("Hash Table - Linear Probing")
+        
+        if 'ht_linear' not in st.session_state:
+            st.session_state.ht_linear = HTOA.HashTableLinearProbing(200)
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            insert_val = st.number_input("Insert:", value=0, key="ht_linear_insert")
+            if st.button("➕ Insert", key="linear_insert"):
+                st.session_state.ht_linear.insert(insert_val)
+                st.success(f"✅ {insert_val} inserted!")
+        
+        with col2:
+            search_val = st.number_input("Search:", value=0, key="ht_linear_search")
+            if st.button("🔍 Search", key="linear_search"):
+                result = st.session_state.ht_linear.search(search_val)
+                if result is not None:
+                    st.success(f"✅ Found at position {result}!")
+                else:
+                    st.warning("❌ Not found.")
+
 
 def show_hashtables_benchmark():
     st.header("📈 Hash Tables Performance Test")
@@ -575,6 +716,67 @@ def show_hashtables_benchmark():
                 ax.legend(fontsize=10)
                 ax.grid(True, alpha=0.3)
                 st.pyplot(fig)
+
+def show_red_black_tree_section():
+    """Red-Black Tree section"""
+    st.header("🔴 Red-Black Tree")
+    
+    if 'rbt' not in st.session_state:
+        st.session_state.rbt = red_black_tree.RedBlackTree()
+    
+    st.subheader("Red-Black Tree Operations")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.write("**Insertion:**")
+        insert_value = st.number_input("Value:", value=0, key="rbt_insert")
+        if st.button("Insert in RBT"):
+            st.session_state.rbt.insert(insert_value)
+            st.success(f"Value {insert_value} inserted!")
+    
+    with col2:
+        st.write("**Search:**")
+        search_value = st.number_input("Value:", value=0, key="rbt_search")
+        if st.button("🔍 Search in RBT"):
+            result = st.session_state.rbt.search(search_value)
+            if result:
+                st.success(f"✅ Value {search_value} found!")
+            else:
+                st.warning(f"❌ Value {search_value} not found.")
+    
+    with col3:
+        if st.button("Minimum"):
+            if st.session_state.rbt.root:
+                min_node = st.session_state.rbt.minimum()
+                st.metric("Minimum", min_node.key)
+            else:
+                st.write("Empty RBT")
+        
+        if st.button("Maximum"):
+            if st.session_state.rbt.root:
+                max_node = st.session_state.rbt.maximum()
+                st.metric("Maximum", max_node.key)
+            else:
+                st.write("Empty RBT")
+    
+    st.subheader("🌳 Red-Black Tree Structure")
+    if st.button("Show RBT Structure"):
+        if st.session_state.rbt.root:
+            st.text("RBT Structure (with colors):")
+            st.code(str(st.session_state.rbt))
+        else:
+            st.write("Empty RBT")
+    
+    st.info("""
+    **Red-Black Tree Properties:**
+    - Every node is red or black
+    - The root is always black
+    - Leaves (NIL) are black
+    - Red nodes have black children
+    - All paths from root to leaves have the same number of black nodes
+    """)
+
 
 def apply_sorting_algorithm(algorithm, values):
     """Apply the selected sorting algorithm"""
