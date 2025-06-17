@@ -229,6 +229,8 @@ def main():
 def show_sorting_section():
     st.header("🔄 Sorting Algorithms")
     
+    st.empty() 
+
     st.subheader("Apply a Sorting Algorithm")
     
     col1, col2 = st.columns([1, 2])
@@ -305,7 +307,6 @@ def show_sorting_section():
     cache_key = f"sorting_perf_{'_'.join(map(str, sorted(input_sizes)))}_{n_of_runs}"
   
     if cache_key not in st.session_state and not st.session_state.performance_cancelled:
-
         loading_container = st.container()
         
         with loading_container:
@@ -325,7 +326,6 @@ def show_sorting_section():
                     def check_cancelled():
                         return st.session_state.get('performance_cancelled', False)
                     
-                    # Chiama performance_test con il callback
                     results = sorting.performance_test(
                         tuple(input_sizes), 
                         n_of_runs,
@@ -343,6 +343,7 @@ def show_sorting_section():
                     
                     loading_container.empty()
                     st.success("Performance test completed!")
+                    st.rerun()
                 
             except Exception as e:
                 loading_container.empty()

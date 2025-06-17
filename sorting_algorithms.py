@@ -86,8 +86,8 @@ def partition(values, start, end):
     partion helper function that swap values and return the i'th
     index from where to start and where to end the next sublists division.
     """
-
-    pivot = values[randint(start, end)]
+    
+    pivot = values[end]
     i = start - 1
 
     for j in range(start, end):
@@ -321,3 +321,8 @@ if __name__ == "__main__":
             for algo, performances in performances.items()
         )
     )
+
+    test = [10,9,4,2,0,7,25]
+    quick_sort(test, 0, len(test)-1)
+    print(test)
+
