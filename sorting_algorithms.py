@@ -308,6 +308,25 @@ def performance_test(
 
     return performances
 
+def carica_da_file(nome_file):
+    """Carica una lista di numeri da un file di testo separati da una virgola"""
+    values = []
+    with open(nome_file, 'r') as file:
+        contenuto = file.read()
+        numeri = contenuto.split(',')
+        
+        for numero in numeri:
+            numero = numero.strip()
+            if numero:
+                try:
+                    if '.' in numero:
+                        values.append(float(numero))
+                    else:
+                        values.append(int(numero))
+                except ValueError:
+                    pass 
+    return values
+
 
 if __name__ == "__main__":
     input_sizes = (10, 100, 1000)  # 10_000

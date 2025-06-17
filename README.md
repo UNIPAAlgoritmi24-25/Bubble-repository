@@ -34,7 +34,7 @@ Open browser at `http://localhost:8501`
 - **Types**: Directed/Undirected, Weighted/Unweighted
 - **Creation methods**: Manual input, random generation, file upload
 - **Representations**: Adjacency lists and adjacency matrix
-- **Algorithms**: BFS, DFS, Dijkstra, Kruskal, Topological Sort, Connected Components
+- **Algorithms**: BFS, DFS, Dijkstra, Kruskal, Topological Sort, Connected Components...
 
 ## Implementation Details
 
@@ -61,14 +61,3 @@ Open browser at `http://localhost:8501`
 - Pandas
 - Matplotlib
 - SymPy
-
-## Academic Use
-
-Developed for university coursework on algorithms and data structures. Implements all required functionality as specified in project guidelines:
-
-- Complete sorting algorithm implementations with performance analysis
-- Full data structure operations with comparative benchmarking
-- Comprehensive graph algorithms for different graph types
-- Interactive interface for testing and visualization
-
----
