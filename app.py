@@ -222,7 +222,7 @@ def main():
     elif section == "Hash Tables Performance Test":
         show_hashtables_benchmark()
     elif section == "Red-Black Tree":
-        pass
+        show_red_black_tree_section()
     elif section == "Graphs":
         pass
 
@@ -716,6 +716,67 @@ def show_hashtables_benchmark():
                 ax.legend(fontsize=10)
                 ax.grid(True, alpha=0.3)
                 st.pyplot(fig)
+
+def show_red_black_tree_section():
+    """Red-Black Tree section"""
+    st.header("🔴 Red-Black Tree")
+    
+    if 'rbt' not in st.session_state:
+        st.session_state.rbt = red_black_tree.RedBlackTree()
+    
+    st.subheader("Red-Black Tree Operations")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.write("**Insertion:**")
+        insert_value = st.number_input("Value:", value=0, key="rbt_insert")
+        if st.button("Insert in RBT"):
+            st.session_state.rbt.insert(insert_value)
+            st.success(f"Value {insert_value} inserted!")
+    
+    with col2:
+        st.write("**Search:**")
+        search_value = st.number_input("Value:", value=0, key="rbt_search")
+        if st.button("🔍 Search in RBT"):
+            result = st.session_state.rbt.search(search_value)
+            if result:
+                st.success(f"✅ Value {search_value} found!")
+            else:
+                st.warning(f"❌ Value {search_value} not found.")
+    
+    with col3:
+        if st.button("Minimum"):
+            if st.session_state.rbt.root:
+                min_node = st.session_state.rbt.minimum()
+                st.metric("Minimum", min_node.key)
+            else:
+                st.write("Empty RBT")
+        
+        if st.button("Maximum"):
+            if st.session_state.rbt.root:
+                max_node = st.session_state.rbt.maximum()
+                st.metric("Maximum", max_node.key)
+            else:
+                st.write("Empty RBT")
+    
+    st.subheader("🌳 Red-Black Tree Structure")
+    if st.button("Show RBT Structure"):
+        if st.session_state.rbt.root:
+            st.text("RBT Structure (with colors):")
+            st.code(str(st.session_state.rbt))
+        else:
+            st.write("Empty RBT")
+    
+    st.info("""
+    **Red-Black Tree Properties:**
+    - Every node is red or black
+    - The root is always black
+    - Leaves (NIL) are black
+    - Red nodes have black children
+    - All paths from root to leaves have the same number of black nodes
+    """)
+
 
 def apply_sorting_algorithm(algorithm, values):
     """Apply the selected sorting algorithm"""
