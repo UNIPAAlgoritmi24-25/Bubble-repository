@@ -294,7 +294,7 @@ def show_sorting_section():
     
     # =============== PERFORMANCE TESTING ===============
     st.subheader("Performance Testing")
-        
+    
     input_sizes = [10, 100, 1000, 10000]
     n_of_runs = 10
     
@@ -302,8 +302,8 @@ def show_sorting_section():
         st.session_state.performance_cancelled = False
     
     # Cache
-    cache_key = f"sorting_performance_{input_sizes}_{n_of_runs}"
-    
+    cache_key = f"sorting_perf_{'_'.join(map(str, sorted(input_sizes)))}_{n_of_runs}"
+  
     if cache_key not in st.session_state and not st.session_state.performance_cancelled:
 
         loading_container = st.container()
@@ -322,14 +322,27 @@ def show_sorting_section():
         if not st.session_state.performance_cancelled:
             try:
                 with st.spinner("Running performance test..."):
-                    results = sorting.performance_test(input_sizes, n_of_runs)
-                
-                # Salva in cache
-                st.session_state[cache_key] = results
-                
-                loading_container.empty()
-                
-                st.success("Performance test completed!")
+                    def check_cancelled():
+                        return st.session_state.get('performance_cancelled', False)
+                    
+                    # Chiama performance_test con il callback
+                    results = sorting.performance_test(
+                        tuple(input_sizes), 
+                        n_of_runs,
+                        cancel_check_callback=check_cancelled
+                    )
+
+                if results is None:
+                    st.session_state.performance_cancelled = True
+                    loading_container.empty()
+                    st.rerun()
+
+                else:
+                    # Salva in cache
+                    st.session_state[cache_key] = results
+                    
+                    loading_container.empty()
+                    st.success("Performance test completed!")
                 
             except Exception as e:
                 loading_container.empty()

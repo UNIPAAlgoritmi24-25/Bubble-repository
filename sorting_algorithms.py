@@ -238,7 +238,8 @@ def CountingSort(array):
 
 
 def performance_test(
-    input_sizes: tuple[int], n_of_runs: int
+    input_sizes: tuple[int], n_of_runs: int,
+    cancel_check_callback=None 
 ) -> dict[str, list[float]]:
     """This functions allows to execute a performance test on the sorting
     algos of the module.
@@ -284,9 +285,14 @@ def performance_test(
 
     for values in random_valuess:
         for algorithm, name in zip(functions, performances.keys()):
+            if cancel_check_callback and cancel_check_callback():
+                return None
             time_total = 0
 
             for run in range(n_of_runs):
+                if cancel_check_callback and cancel_check_callback():
+                    return None
+                
                 # call the algo to sort the list and record the elapsed time
                 shuffle(values)
                 start_time = time.time()
