@@ -271,9 +271,44 @@ def show_sorting_section():
                         st.info(f"⏱️ **Execution time**: {exec_time:.6f} seconds")
                     except ValueError:
                         st.error("Enter valid numbers separated by comma")
-            
+
             elif input_method == "📁 File upload":
-                '''da implementare'''
+                uploaded_file = st.file_uploader(
+                    "Choose a file with numbers", 
+                    type=['txt'],
+                    help="File should contain comma-separated numbers"
+                )
+                
+                if uploaded_file is not None:
+                    if st.button("Sort", type="primary"):
+                        try:
+                            # Salva temporaneamente il file
+                            with open("temp_numbers.txt", "wb") as f:
+                                f.write(uploaded_file.getbuffer())
+                            
+                            values = sorting.carica_da_file("temp_numbers.txt")
+                            
+                            # rimiovere il file temp
+                            import os
+                            os.remove("temp_numbers.txt")
+                            
+                            if not values:
+                                st.error("No valid numbers found in file!")
+                            else:
+                                start_time = time.time()
+                                sorted_values = apply_sorting_algorithm(algorithm, values.copy())
+                                exec_time = time.time() - start_time
+                                
+                                col1, col2 = st.columns(2)
+                                col1.write("**Original array:**")
+                                col1.code(str(values))
+                                col2.write("**Sorted array:**")
+                                col2.code(str(sorted_values))
+                                
+                                st.info(f"Execution time: {exec_time:.6f} seconds")
+                                
+                        except Exception as e:
+                            st.error(f"Error loading file: {str(e)}")
 
             elif input_method == "🎲 Random generation":
                 size = st.number_input("Array size:", min_value=1, value=20, step=1, format="%d")
@@ -401,43 +436,73 @@ def show_sorting_section():
             st.session_state.performance_cancelled = False
             st.rerun()
 
+
 def show_linked_list_section():
     st.header("📝 Linked Lists")
     
     if 'linked_list' not in st.session_state:
         st.session_state.linked_list = Linked_list.LinkedList()
     
-
     st.subheader("Linked List Operations")
-        
-        
-    st.write("**Current List:**")
-    if st.session_state.linked_list.head:
-        st.code(str(st.session_state.linked_list))
-    else:
-        st.write("Empty list")
-
-    col1, col2 = st.columns(2)
     
-    with col1:
-        st.write("**Insertion:**")
-        new_value = st.number_input("Value to insert:", value=0)
-        if st.button("Insert at head"):
-            st.session_state.linked_list.insert_at_head(new_value)
-            st.success(f"Value {new_value} inserted!")
-            st.rerun()
+    tab1, tab2 = st.tabs(["Manual Input", "📁 File Upload"])
+    
+    with tab1:
+        st.write("**Current List:**")
+        if st.session_state.linked_list.head:
+            st.code(str(st.session_state.linked_list))
+        else:
+            st.write("Empty list")
 
-    with col2:
-        st.write("**Search:**")
-        search_value = st.number_input("Value to search:", value=0, key="search")
-        if st.button("Search"):
-            result = st.session_state.linked_list.search(search_value)
-            if result:
-                st.success(f"✅ Value {search_value} found!")
-            else:
-                st.warning(f"❌ Value {search_value} not found.")
+        col1, col2 = st.columns(2)
         
+        with col1:
+            st.write("**Insertion:**")
+            new_value = st.number_input("Value to insert:", value=0)
+            if st.button("Insert at head"):
+                st.session_state.linked_list.insert_at_head(new_value)
+                st.success(f"Value {new_value} inserted!")
+                st.rerun()
+
+        with col2:
+            st.write("**Search:**")
+            search_value = st.number_input("Value to search:", value=0, key="search")
+            if st.button("Search"):
+                result = st.session_state.linked_list.search(search_value)
+                if result:
+                    st.success(f"✅ Value {search_value} found!")
+                else:
+                    st.warning(f"❌ Value {search_value} not found.")
+    
+    with tab2:
+       st.write("**Load list from file**")
+ 
+       uploaded_file = st.file_uploader("Choose a file", type=['txt'])
+    
+       if uploaded_file is not None:
+           if st.button("Load into list", type="primary"):
+               try:
+                 
+                   with open("temp_list.txt", "wb") as f:
+                       f.write(uploaded_file.getbuffer())
+
+                   st.session_state.linked_list = Linked_list.carica_da_file("temp_list.txt")
+          
+                   import os
+                   os.remove("temp_list.txt")
+                
+                   st.success("✅ List loaded successfully!")
+                   st.rerun()
+                
+               except Exception as e:
+                   st.error(f"Error loading file: {str(e)}")
         
+           if st.session_state.linked_list.head:
+               st.write("**Current List:**")
+               st.code(str(st.session_state.linked_list))
+        
+    st.markdown("---")
+    
     st.subheader("Operations")
     col1, col2 = st.columns(2)
         
@@ -471,9 +536,14 @@ def show_linked_list_section():
         if st.button("Successor"):
             succ = st.session_state.linked_list.successor(succ_value)
             if succ is not None:
-                st.write(f"Successor: {succ.value}")
+                st.write(f"Successor: {succ}")
             else:
                 st.write("No successor")
+    
+    if st.button("Clear List", type="secondary"):
+        st.session_state.linked_list = Linked_list.LinkedList()
+        st.success("List cleared!")
+        st.rerun()
 
 def show_bst_section():
     st.header("🌳 Binary Search Trees (BST)")

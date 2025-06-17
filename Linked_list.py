@@ -88,3 +88,21 @@ class LinkedList:
                 return aus
             aus = aus.next
         return None  
+    
+def carica_da_file(nome_file):
+    A = LinkedList()
+    with open(nome_file, 'r') as file:
+        contenuto = file.read()
+        valori = contenuto.split(',')
+            
+        for valore in valori:
+            valore = valore.strip()
+            if valore: 
+                try:
+                    if '.' in valore:
+                        A.insert_at_head(float(valore))
+                    else:
+                        A.insert_at_head(int(valore))
+                except ValueError:
+                    A.insert_at_head(valore)
+    return A
