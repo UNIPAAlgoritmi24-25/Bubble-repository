@@ -121,3 +121,21 @@ class BinarySearchTree:
             node = parent
             parent = parent.parent
         return parent
+
+def carica_da_file(nome_file):
+    bst = BinarySearchTree()
+    with open(nome_file, 'r') as file:
+        contenuto = file.read()
+        valori = contenuto.replace('\n', ',').split(',')
+        
+        for valore in valori:
+            valore = valore.strip()
+            if valore:
+                try:
+                    if '.' in valore:
+                        bst.insert(float(valore))
+                    else:
+                        bst.insert(int(valore))
+                except ValueError:
+                    pass  
+    return bst
