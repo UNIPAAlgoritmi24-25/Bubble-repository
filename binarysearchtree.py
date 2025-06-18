@@ -94,6 +94,30 @@ class BinarySearchTree:
             successor.left = node.left
             successor.left.parent = successor
 
+    def predecessor(self, val):
+        node = self.search(val)
+        if not node:
+            return None
+        
+        if node.left:
+            return self.maximum(node.left)
+        
+        parent = node.parent
+        while parent and node == parent.left:
+            node = parent
+            parent = parent.parent
+        return parent
 
-# Esempio d'uso
+    def successor(self, val):
+        node = self.search(val)
+        if not node:
+            return None
+ 
+        if node.right:
+            return self.minimum(node.right)
 
+        parent = node.parent
+        while parent and node == parent.right:
+            node = parent
+            parent = parent.parent
+        return parent
