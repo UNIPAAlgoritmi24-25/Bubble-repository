@@ -95,32 +95,30 @@ class BinarySearchTree:
             successor.left.parent = successor
 
     def predecessor(self, val):
-        node = self.search(val)
-        if not node:
-            return None
+        predecessor = None
+        current = self.root
         
-        if node.left:
-            return self.maximum(node.left)
+        while current:
+            if val > current.val:
+                predecessor = current 
+                current = current.right
+            else:
+                current = current.left
         
-        parent = node.parent
-        while parent and node == parent.left:
-            node = parent
-            parent = parent.parent
-        return parent
-
+        return predecessor
+    
     def successor(self, val):
-        node = self.search(val)
-        if not node:
-            return None
- 
-        if node.right:
-            return self.minimum(node.right)
-
-        parent = node.parent
-        while parent and node == parent.right:
-            node = parent
-            parent = parent.parent
-        return parent
+        successor = None
+        current = self.root
+        
+        while current:
+            if val < current.val:
+                successor = current 
+                current = current.left
+            else:
+                current = current.right
+        
+        return successor
 
 def carica_da_file(nome_file):
     bst = BinarySearchTree()
