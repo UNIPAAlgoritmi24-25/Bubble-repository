@@ -891,15 +891,6 @@ def show_red_black_tree_section():
             st.code(str(st.session_state.rbt))
         else:
             st.write("Empty RBT")
-    
-    st.info("""
-    **Red-Black Tree Properties:**
-    - Every node is red or black
-    - The root is always black
-    - Leaves (NIL) are black
-    - Red nodes have black children
-    - All paths from root to leaves have the same number of black nodes
-    """)
 
 
 def apply_sorting_algorithm(algorithm, values):
