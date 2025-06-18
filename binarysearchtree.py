@@ -34,7 +34,7 @@ class BinarySearchTree:
 
     def _print(self, node, level=0):
         if node:
-            print(' ' * level, node.val)
+            print('  ' * level, node.val)
             self._print(node.left, level + 1)
             self._print(node.right, level + 1)
 
