@@ -4,13 +4,14 @@ import pandas as pd
 import sorting_algorithms as sorting
 import Linked_list
 import binarysearchtree
-from io import StringIO
+import io
 import random
 import time
 import HTLL
 import HTOA
 import red_black_tree
-
+import sys
+import os
 
 def Ds_benchmark(input_sizes):
     LL={'LL': {}, 'BST': {}, 'Arr': {},'RBT': {}}
@@ -282,14 +283,11 @@ def show_sorting_section():
                 if uploaded_file is not None:
                     if st.button("Sort", type="primary"):
                         try:
-                            # Salva temporaneamente il file
                             with open("temp_numbers.txt", "wb") as f:
                                 f.write(uploaded_file.getbuffer())
                             
                             values = sorting.carica_da_file("temp_numbers.txt")
                             
-                            # rimiovere il file temp
-                            import os
                             os.remove("temp_numbers.txt")
                             
                             if not values:
@@ -487,8 +485,6 @@ def show_linked_list_section():
                        f.write(uploaded_file.getbuffer())
 
                    st.session_state.linked_list = Linked_list.carica_da_file("temp_list.txt")
-          
-                   import os
                    os.remove("temp_list.txt")
                 
                    st.success("✅ List loaded successfully!")
@@ -546,37 +542,80 @@ def show_linked_list_section():
         st.rerun()
 
 def show_bst_section():
-    st.header("🌳 Binary Search Trees (BST)")
+    st.header("🌳 Binary Search Trees")
     
     if 'bst' not in st.session_state:
         st.session_state.bst = binarysearchtree.BinarySearchTree()
     
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.write("**Insertion:**")
-        insert_value = st.number_input("Value:", value=0, key="bst_insert")
-        if st.button("➕ Insert"):
-            st.session_state.bst.insert(insert_value)
-            st.success(f"✅ {insert_value} inserted!")
-    
-    with col2:
-        st.write("**Search:**")
-        search_value = st.number_input("Value:", value=0, key="bst_search")
-        if st.button("🔍 Search"):
-            result = st.session_state.bst.search(search_value)
-            if result:
-                st.success(f"✅ {search_value} found!")
-            else:
-                st.warning(f"❌ {search_value} not found.")
-    
-    with col3:
-        st.write("**Deletion:**")
-        delete_value = st.number_input("Value:", value=0, key="bst_delete")
-        if st.button("🗑️ Delete"):
-            st.session_state.bst.delete(delete_value)
-            st.success(f"✅ {delete_value} deleted!")
-    
+    #colonne
+    col_main, col_tree = st.columns([2, 1])
+
+    with col_tree:
+        st.subheader("🌳 Current BST")
+        if st.session_state.bst.root:
+            old_stdout = sys.stdout
+            sys.stdout = buffer = io.StringIO()
+            st.session_state.bst.print()
+            output = buffer.getvalue()
+            sys.stdout = old_stdout
+            st.code(output, language=None)
+        else:
+            st.info("Empty BST")
+
+    with col_main:
+        tab1, tab2 = st.tabs(["📝 Manual Input", "📁 File Upload"])
+        
+        col1, col2, col3 = st.columns(3)
+        with tab1:
+            with col1:
+                st.write("**Insertion:**")
+                insert_value = st.number_input("Value:", value=0, key="bst_insert")
+                if st.button("➕ Insert"):
+                    st.session_state.bst.insert(insert_value)
+                    st.success(f"✅ {insert_value} inserted!")
+                    st.rerun()
+            
+            with col2:
+                st.write("**Search:**")
+                search_value = st.number_input("Value:", value=0, key="bst_search")
+                if st.button("🔍 Search"):
+                    result = st.session_state.bst.search(search_value)
+                    if result:
+                        st.success(f"✅ {search_value} found!")
+                    else:
+                        st.warning(f"❌ {search_value} not found.")
+
+            with col3:
+                st.write("**Deletion:**")
+                delete_value = st.number_input("Value:", value=0, key="bst_delete")
+                if st.button("🗑️ Delete"):
+                    st.session_state.bst.delete(delete_value)
+                    st.success(f"✅ {delete_value} deleted!")
+                    st.rerun()
+
+        with tab2:        
+            uploaded_file = st.file_uploader("Choose a file")
+            
+            if uploaded_file is not None:
+                if st.button("Load into BST", type="primary"):
+                    try:
+                        with open("temp_bst.txt", "wb") as f:
+                            f.write(uploaded_file.getbuffer())
+
+                        st.session_state.bst = binarysearchtree.carica_da_file("temp_bst.txt")
+
+                        os.remove("temp_bst.txt")
+                        
+                        st.success("BST loaded")
+                        st.rerun()
+                        
+                    except Exception as e:
+                        st.error(f"Error looading file: {str(e)}")
+        
+        st.markdown("---")
+        
+    st.subheader("BST Analysis")
+        
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
@@ -584,6 +623,7 @@ def show_bst_section():
             if st.session_state.bst.root:
                 min_node = st.session_state.bst.minimum()
                 st.metric("Minimum", min_node.val)
+            
     
     with col2:
         if st.button("📈 Maximum"):
@@ -592,13 +632,27 @@ def show_bst_section():
                 st.metric("Maximum", max_node.val)
     
     with col3:
-        if st.button("🌳 Show Structure"):
-            if st.session_state.bst.root:
-                st.text("BST Structure:")
-                # Implement visualization
-                st.info("Visualization to be implemented")
+        pred_value = st.number_input("Value:", value=0, key="bst_pred")
+        if st.button("Predecessor"):
+            pred = st.session_state.bst.predecessor(pred_value)
+            if pred:
+                st.metric("Predecessor", pred.val)
             else:
-                st.write("Empty BST")
+                st.write("No predecessor")
+    
+    with col4:
+        succ_value = st.number_input("Value:", value=0, key="bst_succ")
+        if st.button("Successor"):
+            succ = st.session_state.bst.successor(succ_value)
+            if succ:
+                st.metric("Successor", succ.val)
+            else:
+                st.write("No successor")
+
+    if st.button("Clear BST", type="secondary"):
+        st.session_state.bst = binarysearchtree.BinarySearchTree()
+        st.success("BST cleared!")
+        st.rerun()
 
 def show_datastructures_benchmark():
     st.header("📊 Data Structures Performance Test")

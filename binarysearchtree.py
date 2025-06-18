@@ -34,7 +34,7 @@ class BinarySearchTree:
 
     def _print(self, node, level=0):
         if node:
-            print(' ' * level, node.val)
+            print('  ' * level, node.val)
             self._print(node.left, level + 1)
             self._print(node.right, level + 1)
 
@@ -94,6 +94,46 @@ class BinarySearchTree:
             successor.left = node.left
             successor.left.parent = successor
 
+    def predecessor(self, val):
+        predecessor = None
+        current = self.root
+        
+        while current:
+            if val > current.val:
+                predecessor = current 
+                current = current.right
+            else:
+                current = current.left
+        
+        return predecessor
+    
+    def successor(self, val):
+        successor = None
+        current = self.root
+        
+        while current:
+            if val < current.val:
+                successor = current 
+                current = current.left
+            else:
+                current = current.right
+        
+        return successor
 
-# Esempio d'uso
-
+def carica_da_file(nome_file):
+    bst = BinarySearchTree()
+    with open(nome_file, 'r') as file:
+        contenuto = file.read()
+        valori = contenuto.replace('\n', ',').split(',')
+        
+        for valore in valori:
+            valore = valore.strip()
+            if valore:
+                try:
+                    if '.' in valore:
+                        bst.insert(float(valore))
+                    else:
+                        bst.insert(int(valore))
+                except ValueError:
+                    pass  
+    return bst
