@@ -1,43 +1,59 @@
 import heapq
 from Undirected_Graph import Undirected_Graph_Weighted
-    
+
 def prim(graph):
-    if not graph.vertex_set or not graph.edges_set:
+    if not graph.vertex_set:
         return []
     
+    vertices = list(graph.vertex_set)
+    key = {v: float('inf') for v in vertices}  # key[v] = ∞
+    parent = {v: None for v in vertices}       # parent[v] = NIL
+    
+    root = vertices[0]
+    key[root] = 0  # radice messa a 0
+    
+    Q = [(key[v], v) for v in vertices]
+    heapq.heapify(Q) #per ordinare
+    
+    adjacency = {v: [] for v in vertices}
     edge_weights = {}
-    adjacency = {v: [] for v in graph.vertex_set}
     
     for u, v, weight in graph.edges_set:
-        edge_weights[(u, v)] = weight
-        edge_weights[(v, u)] = weight
         adjacency[u].append(v)
         adjacency[v].append(u)
+        edge_weights[(u, v)] = weight
+        edge_weights[(v, u)] = weight
     
-    mst = []
-    visited = set()
-    min_heap = []
+    in_mst = set()
     
-    start = graph.vertex_set[0]
-    visited.add(start)
-    
-    for v in adjacency[start]:
-        weight = edge_weights[(start, v)]
-        heapq.heappush(min_heap, (weight, start, v))
-    
-    while min_heap and len(visited) < len(graph.vertex_set):
-        weight, u, v = heapq.heappop(min_heap)
+    while Q:
+        # Extract-Min
+        current_key, u = heapq.heappop(Q)
         
-        if v in visited:
+        # Se abbiamo già processato questo vertice vai avanti
+        if u in in_mst:
             continue
             
-        visited.add(v)
-        mst.append((u, v, weight))
+        # Se la key è cambiata vai avanti
+        if current_key > key[u]:
+            continue
+            
+        in_mst.add(u)
         
-        for neighbor in adjacency[v]:
-            if neighbor not in visited:
-                w = edge_weights[(v, neighbor)]
-                heapq.heappush(min_heap, (w, v, neighbor))
+        for v in adjacency[u]:
+            if v not in in_mst: 
+                weight = edge_weights[(u, v)]
+                
+                if weight < key[v]:
+                    parent[v] = u      
+                    key[v] = weight    
+                    # Decrease-Key(Q, v, w(u,v))
+                    heapq.heappush(Q, (weight, v))
+    
+    mst = []
+    for v in vertices:
+        if parent[v] is not None:
+            mst.append((parent[v], v, key[v]))
     
     return mst
 
